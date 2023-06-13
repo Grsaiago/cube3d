@@ -6,14 +6,11 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:55:49 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/12 19:24:55 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/13 17:44:06 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <errno.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include "./libft/libft.h"
+#include "./cub3d.h"
 
 typedef struct s_vparams
 {

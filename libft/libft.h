@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 18:23:47 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/12 19:18:24 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/13 19:49:24 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,30 @@
 # include <unistd.h>
 # include <stdarg.h>
 
+enum e_read
+{
+	FT_LST = 1,
+	FT_STR = 2,
+	FT_MAT = 4,
+	FT_N = 8,
+	FT_NON = 16
+};
+
+/* read_file enum */
+union u_read
+{
+	char			*str;
+	void			*err;
+	struct s_list	*lst;
+};
+
 /* smartptr_struct */
 typedef struct s_meta
 {
 	void	(*dtor)(void *pointer);
 	void	*ptr;
 }	t_meta;
+
 /* libft bonus struct */
 typedef struct s_list
 {
@@ -100,6 +118,8 @@ void			ft_free_mat(char **mat);
 char			**ft_lsttochrmat(t_list *node);
 int				ft_mat_size(char **mat);
 char			*ft_revstring(char *str);
+void			*ft_read_file(int fd, int flags);
+int				ft_isnumstr(char *str);
 /* SMART POINTERS */
 /* Ussage: <variable_name>__attribute__((cleanup(free_call))); */
 void			sfree(void *ptr);
