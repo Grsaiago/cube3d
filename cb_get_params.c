@@ -39,18 +39,20 @@ int	cb_validate_cf_numbers(char **mat)
 
 int	cb_get_params(t_list *lst, t_data *data)
 {
-	if (cb_get_no(lst, data) != 0)
-		return (1);
-	else if (cb_get_so(lst, data) != 0)
-		return (1);
-	else if (cb_get_we(lst, data) != 0)
-		return (1);
-	else if (cb_get_ea(lst, data) != 0)
-		return (1);
-	else if (cb_get_f(lst, data) != 0)
-		return (1);
-	else if (cb_get_c(lst, data) != 0)
-		return (1);
+	if ((cb_get_no(lst, data) != 0) || (cb_get_so(lst, data) != 0)
+		|| (cb_get_we(lst, data) != 0) || (cb_get_ea(lst, data) != 0)
+		|| (cb_get_f(lst, data) != 0) || (cb_get_c(lst, data) != 0))
+		{
+			if (data->NO)
+				free(data->NO);
+			if (data->SO)
+				free(data->SO);
+			if (data->WE)
+				free(data->WE);
+			if (data->EA)
+				free(data->EA);
+			return (1);
+		}
 	/*
 	else if (cb_get_map(lst, data) != 0)
 		return (1);
