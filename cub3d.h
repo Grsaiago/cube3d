@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/14 15:31:12 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/14 17:28:56 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,17 @@ typedef struct s_rgb
 	unsigned char	b;
 } t_rgb;
 
-
 typedef struct s_data
 {
 	char	*NO;
 	char	*SO;
 	char	*WE;
 	char	*EA;
+	char	**map;
 	t_rgb	F;
+	int		FOK;
 	t_rgb	C;
+	int		COK;
 } t_data;
 
 /* info validation */
