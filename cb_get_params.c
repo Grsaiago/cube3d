@@ -1,5 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cb_get_params.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
+/*   Updated: 2023/06/14 15:31:32 by gsaiago          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./cub3d.h"
 
+int	mat_to_rgb(char **mat, t_rgb *rgb)
+{
+	rgb->r = ft_atoi(mat[0]);
+	rgb->g = ft_atoi(mat[1]);
+	rgb->b = ft_atoi(mat[2]);
+	return (0);
+}
 
 int	cb_validate_coordinate_size(char **mat, int size)
 {
@@ -37,11 +56,11 @@ int	cb_validate_cf_numbers(char **mat)
 	return (0);
 }
 
-int	cb_get_params(t_list *lst, t_data *data)
+int	cb_load_params(t_list *lst, t_data *data)
 {
-	if ((cb_get_no(lst, data) != 0) || (cb_get_so(lst, data) != 0)
-		|| (cb_get_we(lst, data) != 0) || (cb_get_ea(lst, data) != 0)
-		|| (cb_get_f(lst, data) != 0) || (cb_get_c(lst, data) != 0))
+	if ((cb_load_no(lst, data) != 0) || (cb_load_so(lst, data) != 0)
+		|| (cb_load_we(lst, data) != 0) || (cb_load_ea(lst, data) != 0)
+		|| (cb_load_f(lst, data) != 0) || (cb_load_c(lst, data) != 0))
 		{
 			if (data->NO)
 				free(data->NO);
@@ -60,7 +79,7 @@ int	cb_get_params(t_list *lst, t_data *data)
 	return (0);
 }
 
-int	cb_get_no(t_list *head, t_data *data)
+int	cb_load_no(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -82,7 +101,7 @@ int	cb_get_no(t_list *head, t_data *data)
 	return (perror("Error!\nNo 'NO' parameter"), 1);
 }
 
-int	cb_get_so(t_list *head, t_data *data)
+int	cb_load_so(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -104,7 +123,7 @@ int	cb_get_so(t_list *head, t_data *data)
 	return (perror("Error!\nNo 'SO' parameter"), 1);
 }
 
-int	cb_get_we(t_list *head, t_data *data)
+int	cb_load_we(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -126,7 +145,7 @@ int	cb_get_we(t_list *head, t_data *data)
 	return (perror("Error!\nNo 'WE' parameter"), 1);
 }
 
-int	cb_get_ea(t_list *head, t_data *data)
+int	cb_load_ea(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -148,7 +167,7 @@ int	cb_get_ea(t_list *head, t_data *data)
 	return (perror("Error!\nNo 'EA' parameter"), 1);
 }
 
-int	cb_get_f(t_list *head, t_data *data)
+int	cb_load_f(t_list *head, t_data *data)
 {
 	char	**mat;
 	char	*line;
@@ -164,8 +183,7 @@ int	cb_get_f(t_list *head, t_data *data)
 			if (cb_validate_coordinate_size(mat, 3)
 					|| cb_validate_cf_numbers(mat))
 				return (ft_free_mat(mat), 1);
-			data->F = 1; // fazer a função do bitwise na matriz aqui
-			ft_free_mat(mat);
+			mat_to_rgb(mat, &data->F);
 			return (0);
 		}
 		head = head->next;
@@ -174,7 +192,7 @@ int	cb_get_f(t_list *head, t_data *data)
 	return (perror("Error!\nNo 'F' parameter"), 1);
 }
 
-int	cb_get_c(t_list *head, t_data *data)
+int	cb_load_c(t_list *head, t_data *data)
 {
 	char	**mat;
 	char	*line;
@@ -190,7 +208,7 @@ int	cb_get_c(t_list *head, t_data *data)
 			if (cb_validate_coordinate_size(mat, 3)
 					|| cb_validate_cf_numbers(mat))
 				return (ft_free_mat(mat), 1);
-			data->C = 1; // fazer a função do bitwise na matriz aqui
+			mat_to_rgb(mat, &data->C);
 			ft_free_mat(mat);
 			return (0);
 		}

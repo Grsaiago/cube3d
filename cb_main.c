@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:03 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/13 19:22:49 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/14 15:32:01 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@ int	main(int argc, char **argv)
 		return (0);
 	data = &(t_data){0};
 	head = ft_read_file(fd, FT_LST | FT_NON);
-	cb_get_params(head, data);
-	free(data->NO);
-	free(data->SO);
-	free(data->WE);
-	free(data->EA);
+	cb_load_params(head, data);
 	ft_lstclear(&head, free);
 }
