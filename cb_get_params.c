@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/14 15:31:32 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/14 15:40:57 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ int	cb_load_f(t_list *head, t_data *data)
 					|| cb_validate_cf_numbers(mat))
 				return (ft_free_mat(mat), 1);
 			mat_to_rgb(mat, &data->F);
+			ft_free_mat(mat);
 			return (0);
 		}
 		head = head->next;
