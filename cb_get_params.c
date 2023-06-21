@@ -6,15 +6,11 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/14 18:28:58 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/20 22:03:25 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./cub3d.h"
-int	cb_get_map_size(t_list *head);
-int	mat_to_rgb(char **mat, t_rgb *rgb);
-int	cb_validate_coordinate_size(char **mat, int size);
-int	cb_validate_cf_numbers(char **mat);
 
 int	mat_to_rgb(char **mat, t_rgb *rgb)
 {
@@ -89,29 +85,6 @@ int	cb_load_params(t_list *lst, t_data *data)
 		return (perror("Error!\nUndefined param"), 1);
 	return (0);
 }
-
-/*
-int	cb_load_params(t_list *lst, t_data *data)
-{
-	if ((cb_load_no(lst, data) != 0) || (cb_load_so(lst, data) != 0)
-		|| (cb_load_we(lst, data) != 0) || (cb_load_ea(lst, data) != 0)
-		|| (cb_load_f(lst, data) != 0) || (cb_load_c(lst, data) != 0)
-		|| (cb_load_map(lst, data) != 0))
-		{
-			if (data->NO)
-				free(data->NO);
-			if (data->SO)
-				free(data->SO);
-			if (data->WE)
-				free(data->WE);
-			if (data->EA)
-				free(data->EA);
-			if (data->map)
-				ft_free_mat(data->map);
-		}
-	return (0);
-}
-*/
 
 int	cb_load_no(t_list *head, t_data *data)
 {
@@ -258,16 +231,15 @@ int	cb_load_c(t_list *head, t_data *data)
 int	cb_load_map(t_list *head, t_data *data)
 {
 	char	*line;
-	int		map_size;
 	int		aux;
 
 	if (!data->NO || !data->SO || !data->WE || !data->EA
 			|| !data->FOK || !data->COK || data->map)
 		return (0);
-	map_size = cb_get_map_size(head);
-	if (map_size <= 0)
+	data->map_height = cb_get_map_height(head);
+	if (data->map_height < 0)
 		return (1);
-	data->map = ft_calloc(map_size + 1, sizeof(char **));
+	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
 	if (!data->map)
 		return (1);
 	while (head)
@@ -280,19 +252,20 @@ int	cb_load_map(t_list *head, t_data *data)
 		head = head->next;
 	}
 	aux = 0;
-	while (map_size > 0)
+	while (aux < data->map_height)
 	{
 		data->map[aux] = ft_strdup(head->content, 0);
 		if (!data->map[aux])
-			return (1);
+			return (perror("Error!\nMalloc error on map loading"), 1);
 		head = head->next;
-		map_size--;
 		aux++;
 	}
+	if (cb_validate_map(data) != 0)
+		return (1);
 	return (0);
 }
 
-int	cb_get_map_size(t_list *head)
+int	cb_get_map_height(t_list *head)
 {
 	int		i;
 	char	*line;
@@ -309,10 +282,12 @@ int	cb_get_map_size(t_list *head)
 	if (!head)
 		return (perror("Error!\nThere is no valid map"), -1);
 	i = 0;
-	while(head && head->content[0])
+	while(head && ft_strlen(head->content) > 1)
 	{
 		i++;
 		head = head->next;
 	}
+	if (i < 3)
+		return (perror("Error!\nThe map must have at least 3 lines"), -1);
 	return (i);
 }
