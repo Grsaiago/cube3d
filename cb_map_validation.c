@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:55:49 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/20 22:01:32 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/26 14:16:21 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int		cb_validate_top_bottom(t_data *data);
 int		cb_validate_sides(t_data *data);
 int		cb_validate_interior(t_data *data);
 void	cb_get_above_below(t_data *data, int line_numb, int *above, int *below);
+static int	cb_player_p(t_data *data, const char c);
 
 /* A validação agora tá indo char por char e rodanddo a cb_validate_interior..
  * Essa validate interior sempre recalcula above e below,
@@ -101,6 +102,8 @@ int	cb_validate_interior(t_data *data)
 				|| data->map[line_numb + 1][i] == ' '
 				|| line[i - 1] == ' ' || line[i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);
+			else if (ft_strchr("NSWE", line[i]) && cb_player_p(data, line[i]))
+				return (1);
 		}
 		line_numb++;
 		line = data->map[line_numb];
@@ -119,4 +122,12 @@ void	cb_get_above_below(t_data *data, int line_numb, int *above, int *below)
 	else
 		*below = ft_strlen(data->map[line_numb + 1]);
 	return ;
+}
+
+static int	cb_player_p(t_data *data, const char c)
+{
+	if (data->spawn_dir)
+		return (perror("Error!\nPlayer spawn double definition"), 1);
+	data->spawn_dir = c;
+	return (0);
 }
