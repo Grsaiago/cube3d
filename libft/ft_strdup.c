@@ -6,11 +6,13 @@
 /*   By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 19:06:54 by gsaiago           #+#    #+#             */
-/*   Updated: 2022/06/09 18:04:51 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:00 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+#include <stdio.h>
 
 char	*ft_strdup(char *s1, int flag)
 {
@@ -20,10 +22,9 @@ char	*ft_strdup(char *s1, int flag)
 	len = 0;
 	while (s1[len])
 		len++;
-	ptr = malloc(len + 1);
+	ptr = ft_valloc(len + 1);
 	if (ptr == NULL)
 		return (NULL);
-	ptr[len] = 0;
 	while (len-- > 0)
 		ptr[len] = s1[len];
 	if (flag && s1)
@@ -31,13 +32,10 @@ char	*ft_strdup(char *s1, int flag)
 	return (ptr);
 }
 
-/*
 int	main (void)
 {
 	char	str[] = "Essa string aqui";
 
 	printf("A str original > %s\n", str);
-	printf("A func ft > %s\n", strdup((const char *)str));
-	printf("A func original > %s\n", ft_strdup((const char *)str));
+	printf("A func original > %s\n", ft_strdup((char *)str, 0));
 }
-*/
