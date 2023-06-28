@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:03 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 12:00:13 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:00:26 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ int	validate_args(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	int		fd;
-	t_data	*data;
+	t_data	data;
 	t_list	*head;
 
 	fd = validate_args(argc, argv);
 	if (fd < 0)
 		return (0);
-	data = &(t_data){0};
+	ft_memset(&data, 0, sizeof(t_data));
 	head = ft_read_file(fd, FT_LST | FT_NON);
-	load_params(head, data);
+	load_params(head, &data);
 	ft_lstclear(&head, free);
 }

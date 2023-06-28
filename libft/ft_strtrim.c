@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:36:00 by gsaiago           #+#    #+#             */
-/*   Updated: 2022/06/14 18:44:49 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 13:34:02 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		s1++;
 	len = ft_strlen(s1) - 1;
 	while (s1[len] && ft_strchr(set, s1[len]) && len >= 0)
-			len--;
+		len--;
 	len++;
 	str = ft_calloc(len + 1, 1);
 	if (str == NULL)

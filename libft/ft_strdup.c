@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 19:06:54 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/27 20:37:00 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 13:34:23 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,4 @@ char	*ft_strdup(char *s1, int flag)
 	if (flag && s1)
 		free(s1);
 	return (ptr);
-}
-
-int	main (void)
-{
-	char	str[] = "Essa string aqui";
-
-	printf("A str original > %s\n", str);
-	printf("A func original > %s\n", ft_strdup((char *)str, 0));
 }

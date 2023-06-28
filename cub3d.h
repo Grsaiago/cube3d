@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 11:55:42 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 13:35:37 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ typedef struct s_rgb
 
 typedef struct s_data
 {
-	char	*NO;
-	char	*SO;
-	char	*WE;
-	char	*EA;
-	t_rgb	F;
-	t_rgb	C;
-	int		FOK;
-	int		COK;
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
+	t_rgb	f;
+	t_rgb	c;
+	int		fok;
+	int		cok;
 	char	**map;
 	int		map_height;
 	char	spawn_dir;

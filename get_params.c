@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 12:00:26 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 13:56:38 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,22 @@ int	load_params(t_list *lst, t_data *data)
 			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
 			|| (load_map(lst, data) != 0))
 			{
-				if (data->NO)
-					free(data->NO);
-				if (data->SO)
-					free(data->SO);
-				if (data->WE)
-					free(data->WE);
-				if (data->EA)
-					free(data->EA);
+				if (data->no)
+					free(data->no);
+				if (data->so)
+					free(data->so);
+				if (data->we)
+					free(data->we);
+				if (data->ea)
+					free(data->ea);
 				if (data->map)
 					ft_free_mat(data->map);
 				return (1);
 			}
 		lst = lst->next;
 	}
-	if (!data->NO || !data->SO || !data->WE || !data->EA
-			|| !data->FOK || !data->COK || !data->map)
+	if (!data->no || !data->so || !data->we || !data->ea
+			|| !data->fok || !data->cok || !data->map)
 		return (perror("Error!\nUndefined param"), 1);
 	return (0);
 }
@@ -90,19 +90,19 @@ int	load_no(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->NO && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->no && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "NO ", 3) != 0)
 		return (0);
-	if (data->NO)
+	if (data->no)
 	{
 		errno = EINVAL;
-		return (perror("Error!\nDouble definition of NO"), 1);
+		return (perror("Error!\nDouble definition of no"), 1);
 	}
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->NO = mat[1];
+	data->no = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -112,19 +112,19 @@ int	load_so(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->SO && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->so && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "SO ", 3) != 0)
 		return (0);
-	if (data->SO)
+	if (data->so)
 	{
 		errno = EINVAL;
-		return (perror("Error!\nDouble definition of SO"), 1);
+		return (perror("Error!\nDouble definition of so"), 1);
 	}
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->SO = mat[1];
+	data->so = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -134,19 +134,19 @@ int	load_we(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->WE && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->we && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "WE ", 3) != 0)
 		return (0);
-	if (data->WE)
+	if (data->we)
 	{
 		errno = EINVAL;
-		return (perror("Error!\nDouble definition of WE"), 1);
+		return (perror("Error!\nDouble definition of we"), 1);
 	}
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->WE = mat[1];
+	data->we = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -156,19 +156,19 @@ int	load_ea(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->EA && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->ea && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "EA ", 3) != 0)
 		return (0);
-	if (data->EA)
+	if (data->ea)
 	{
 		errno = EINVAL;
-		return (perror("Error!\nDouble definition of EA"), 1);
+		return (perror("Error!\nDouble definition of ea"), 1);
 	}
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->EA = mat[1];
+	data->ea = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -179,11 +179,11 @@ int	load_f(t_list *head, t_data *data)
 	char	**mat;
 	char	*line;
 
-	if (!data->FOK && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->fok && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "F ", 2) != 0)
 		return (0);
-	if (data->FOK)
+	if (data->fok)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of F"), 1);
@@ -195,9 +195,9 @@ int	load_f(t_list *head, t_data *data)
 	if (validate_coordinate_size(mat, 3)
 			|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
-	mat_to_rgb(mat, &data->F);
+	mat_to_rgb(mat, &data->f);
 	ft_free_mat(mat);
-	data->FOK = 1;
+	data->fok = 1;
 	return (0);
 }
 
@@ -206,11 +206,11 @@ int	load_c(t_list *head, t_data *data)
 	char	**mat;
 	char	*line;
 
-	if (!data->COK && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->cok && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "C ", 2) != 0)
 		return (0);
-	if (data->COK)
+	if (data->cok)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of C"), 1);
@@ -222,9 +222,9 @@ int	load_c(t_list *head, t_data *data)
 	if (validate_coordinate_size(mat, 3)
 			|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
-	mat_to_rgb(mat, &data->C);
+	mat_to_rgb(mat, &data->c);
 	ft_free_mat(mat);
-	data->COK = 1;
+	data->cok = 1;
 	return (0);
 }
 
@@ -233,8 +233,8 @@ int	load_map(t_list *head, t_data *data)
 	char	*line;
 	int		aux;
 
-	if (!data->NO || !data->SO || !data->WE || !data->EA
-			|| !data->FOK || !data->COK || data->map)
+	if (!data->no || !data->so || !data->we || !data->ea
+			|| !data->fok || !data->cok || data->map)
 		return (0);
 	data->map_height = get_map_height(head);
 	if (data->map_height < 0)
