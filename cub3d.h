@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 13:35:37 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:13:51 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_rgb
 	unsigned char	r;
 	unsigned char	g;
 	unsigned char	b;
-} t_rgb;
+}	t_rgb;
 
 typedef struct s_data
 {
@@ -37,7 +37,7 @@ typedef struct s_data
 	char	**map;
 	int		map_height;
 	char	spawn_dir;
-} t_data;
+}	t_data;
 
 /* info validation */
 int		load_params(t_list *lst, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:03 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 14:00:26 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:19:19 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	validate_args(int argc, char **argv)
 	int	fd;
 
 	if ((argc != 2) || (ft_strlen(argv[1]) < 4)
-			|| (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 5)))
+		|| (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 5)))
 	{
 		errno = EINVAL;
 		return (perror("Error!\nMust be a readable file ending in .cub"), -1);

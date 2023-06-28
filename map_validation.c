@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:55:49 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 11:59:24 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:24:37 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int		player_p(t_data *data, const char c);
 
 int	validate_map(t_data *data)
 {
-
 	if (validate_top_bottom(data))
 		return (1);
 	else if (validate_sides(data))
@@ -29,7 +28,6 @@ int	validate_map(t_data *data)
 	else if (validate_interior(data))
 		return (1);
 	return (0);
-	
 }
 
 int	validate_top_bottom(t_data *data)
@@ -63,7 +61,7 @@ int	validate_sides(t_data *data)
 	while (line)
 	{
 		while (ft_isspace(*line))
-		   line++;
+			line++;
 		if ((*line != '1') || (line[ft_strlen(line) - 1] != '1'))
 			return (perror("Error!\nInvalid char in some side"), 1);
 		i++;
@@ -89,7 +87,7 @@ int	validate_interior(t_data *data)
 		while (line[++i] && (i < (int)ft_strlen(line) - 1))
 		{
 			if (line[i] == '0' && (i > above || i > below
-				|| data->map[line_numb - 1][i] == ' '
+					|| data->map[line_numb - 1][i] == ' '
 				|| data->map[line_numb + 1][i] == ' '
 				|| line[i - 1] == ' ' || line[i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);

@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 13:56:38 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:08:48 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	validate_cf_numbers(char **mat)
 	return (0);
 }
 
-
 int	load_params(t_list *lst, t_data *data)
 {
 	while (lst)
@@ -65,23 +64,23 @@ int	load_params(t_list *lst, t_data *data)
 			|| (load_we(lst, data) != 0) || (load_ea(lst, data) != 0)
 			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
 			|| (load_map(lst, data) != 0))
-			{
-				if (data->no)
-					free(data->no);
-				if (data->so)
-					free(data->so);
-				if (data->we)
-					free(data->we);
-				if (data->ea)
-					free(data->ea);
-				if (data->map)
-					ft_free_mat(data->map);
-				return (1);
-			}
+		{
+			if (data->no)
+				free(data->no);
+			if (data->so)
+				free(data->so);
+			if (data->we)
+				free(data->we);
+			if (data->ea)
+				free(data->ea);
+			if (data->map)
+				ft_free_mat(data->map);
+			return (1);
+		}
 		lst = lst->next;
 	}
 	if (!data->no || !data->so || !data->we || !data->ea
-			|| !data->fok || !data->cok || !data->map)
+		|| !data->fok || !data->cok || !data->map)
 		return (perror("Error!\nUndefined param"), 1);
 	return (0);
 }
@@ -90,7 +89,8 @@ int	load_no(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->no && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->no && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "NO ", 3) != 0)
 		return (0);
@@ -112,7 +112,8 @@ int	load_so(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->so && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->so && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "SO ", 3) != 0)
 		return (0);
@@ -134,7 +135,8 @@ int	load_we(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->we && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->we && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "WE ", 3) != 0)
 		return (0);
@@ -156,7 +158,8 @@ int	load_ea(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->ea && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->ea && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "EA ", 3) != 0)
 		return (0);
@@ -179,7 +182,8 @@ int	load_f(t_list *head, t_data *data)
 	char	**mat;
 	char	*line;
 
-	if (!data->fok && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->fok && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "F ", 2) != 0)
 		return (0);
@@ -193,7 +197,7 @@ int	load_f(t_list *head, t_data *data)
 		line++;
 	mat = ft_split(line, ',');
 	if (validate_coordinate_size(mat, 3)
-			|| validate_cf_numbers(mat))
+		|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
 	mat_to_rgb(mat, &data->f);
 	ft_free_mat(mat);
@@ -206,7 +210,8 @@ int	load_c(t_list *head, t_data *data)
 	char	**mat;
 	char	*line;
 
-	if (!data->cok && !(head->content[0]  == '\0' || ft_strchr("NSWEFC", head->content[0])))
+	if (!data->cok && !(head->content[0] == '\0'
+			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "C ", 2) != 0)
 		return (0);
@@ -220,7 +225,7 @@ int	load_c(t_list *head, t_data *data)
 		line++;
 	mat = ft_split(line, ',');
 	if (validate_coordinate_size(mat, 3)
-			|| validate_cf_numbers(mat))
+		|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
 	mat_to_rgb(mat, &data->c);
 	ft_free_mat(mat);
@@ -234,7 +239,7 @@ int	load_map(t_list *head, t_data *data)
 	int		aux;
 
 	if (!data->no || !data->so || !data->we || !data->ea
-			|| !data->fok || !data->cok || data->map)
+		|| !data->fok || !data->cok || data->map)
 		return (0);
 	data->map_height = get_map_height(head);
 	if (data->map_height < 0)
@@ -282,7 +287,7 @@ int	get_map_height(t_list *head)
 	if (!head)
 		return (perror("Error!\nThere is no valid map"), -1);
 	i = 0;
-	while(head && ft_strlen(head->content) > 1)
+	while (head && ft_strlen(head->content) > 1)
 	{
 		i++;
 		head = head->next;
