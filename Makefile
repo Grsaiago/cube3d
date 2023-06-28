@@ -6,7 +6,7 @@
 #    By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/12 17:39:59 by gsaiago           #+#    #+#              #
-#    Updated: 2023/06/20 20:53:03 by gsaiago          ###   ########.fr        #
+#    Updated: 2023/06/28 11:59:47 by gsaiago          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,9 @@ LIBFT_LINK = -L$(LIBFT_PATH) -lft
 
 CFLAGS = -g -Wall -Wextra -Werror
 
-SRCS = ./cb_main.c \
-	   ./cb_get_params.c \
-	   ./cb_map_validation.c \
+SRCS = ./main.c \
+	   ./get_params.c \
+	   ./map_validation.c \
 
 #$(wildcard *.c)
 

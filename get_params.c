@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cb_get_params.c                                    :+:      :+:    :+:   */
+/*   get_params.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/20 22:03:25 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 12:00:26 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	mat_to_rgb(char **mat, t_rgb *rgb)
 	return (0);
 }
 
-int	cb_validate_coordinate_size(char **mat, int size)
+int	validate_coordinate_size(char **mat, int size)
 {
 	if (!mat)
 		return (perror("Error!\nMalloc failed"), 1);
@@ -32,7 +32,7 @@ int	cb_validate_coordinate_size(char **mat, int size)
 	return (0);
 }
 
-int	cb_validate_cf_numbers(char **mat)
+int	validate_cf_numbers(char **mat)
 {
 	int	numb;
 
@@ -57,14 +57,14 @@ int	cb_validate_cf_numbers(char **mat)
 }
 
 
-int	cb_load_params(t_list *lst, t_data *data)
+int	load_params(t_list *lst, t_data *data)
 {
 	while (lst)
 	{
-		if ((cb_load_no(lst, data) != 0) || (cb_load_so(lst, data) != 0)
-			|| (cb_load_we(lst, data) != 0) || (cb_load_ea(lst, data) != 0)
-			|| (cb_load_f(lst, data) != 0) || (cb_load_c(lst, data) != 0)
-			|| (cb_load_map(lst, data) != 0))
+		if ((load_no(lst, data) != 0) || (load_so(lst, data) != 0)
+			|| (load_we(lst, data) != 0) || (load_ea(lst, data) != 0)
+			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
+			|| (load_map(lst, data) != 0))
 			{
 				if (data->NO)
 					free(data->NO);
@@ -86,7 +86,7 @@ int	cb_load_params(t_list *lst, t_data *data)
 	return (0);
 }
 
-int	cb_load_no(t_list *head, t_data *data)
+int	load_no(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -100,7 +100,7 @@ int	cb_load_no(t_list *head, t_data *data)
 		return (perror("Error!\nDouble definition of NO"), 1);
 	}
 	mat = ft_split(head->content, ' ');
-	if (cb_validate_coordinate_size(mat, 2) != 0)
+	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
 	data->NO = mat[1];
 	free(mat[0]);
@@ -108,7 +108,7 @@ int	cb_load_no(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_so(t_list *head, t_data *data)
+int	load_so(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -122,7 +122,7 @@ int	cb_load_so(t_list *head, t_data *data)
 		return (perror("Error!\nDouble definition of SO"), 1);
 	}
 	mat = ft_split(head->content, ' ');
-	if (cb_validate_coordinate_size(mat, 2) != 0)
+	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
 	data->SO = mat[1];
 	free(mat[0]);
@@ -130,7 +130,7 @@ int	cb_load_so(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_we(t_list *head, t_data *data)
+int	load_we(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -144,7 +144,7 @@ int	cb_load_we(t_list *head, t_data *data)
 		return (perror("Error!\nDouble definition of WE"), 1);
 	}
 	mat = ft_split(head->content, ' ');
-	if (cb_validate_coordinate_size(mat, 2) != 0)
+	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
 	data->WE = mat[1];
 	free(mat[0]);
@@ -152,7 +152,7 @@ int	cb_load_we(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_ea(t_list *head, t_data *data)
+int	load_ea(t_list *head, t_data *data)
 {
 	char	**mat;
 
@@ -166,7 +166,7 @@ int	cb_load_ea(t_list *head, t_data *data)
 		return (perror("Error!\nDouble definition of EA"), 1);
 	}
 	mat = ft_split(head->content, ' ');
-	if (cb_validate_coordinate_size(mat, 2) != 0)
+	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
 	data->EA = mat[1];
 	free(mat[0]);
@@ -174,7 +174,7 @@ int	cb_load_ea(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_f(t_list *head, t_data *data)
+int	load_f(t_list *head, t_data *data)
 {
 	char	**mat;
 	char	*line;
@@ -192,8 +192,8 @@ int	cb_load_f(t_list *head, t_data *data)
 	while (ft_isspace(*line))
 		line++;
 	mat = ft_split(line, ',');
-	if (cb_validate_coordinate_size(mat, 3)
-			|| cb_validate_cf_numbers(mat))
+	if (validate_coordinate_size(mat, 3)
+			|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
 	mat_to_rgb(mat, &data->F);
 	ft_free_mat(mat);
@@ -201,7 +201,7 @@ int	cb_load_f(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_c(t_list *head, t_data *data)
+int	load_c(t_list *head, t_data *data)
 {
 	char	**mat;
 	char	*line;
@@ -219,8 +219,8 @@ int	cb_load_c(t_list *head, t_data *data)
 	while (ft_isspace(*line))
 		line++;
 	mat = ft_split(line, ',');
-	if (cb_validate_coordinate_size(mat, 3)
-			|| cb_validate_cf_numbers(mat))
+	if (validate_coordinate_size(mat, 3)
+			|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
 	mat_to_rgb(mat, &data->C);
 	ft_free_mat(mat);
@@ -228,7 +228,7 @@ int	cb_load_c(t_list *head, t_data *data)
 	return (0);
 }
 
-int	cb_load_map(t_list *head, t_data *data)
+int	load_map(t_list *head, t_data *data)
 {
 	char	*line;
 	int		aux;
@@ -236,7 +236,7 @@ int	cb_load_map(t_list *head, t_data *data)
 	if (!data->NO || !data->SO || !data->WE || !data->EA
 			|| !data->FOK || !data->COK || data->map)
 		return (0);
-	data->map_height = cb_get_map_height(head);
+	data->map_height = get_map_height(head);
 	if (data->map_height < 0)
 		return (1);
 	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
@@ -260,12 +260,12 @@ int	cb_load_map(t_list *head, t_data *data)
 		head = head->next;
 		aux++;
 	}
-	if (cb_validate_map(data) != 0)
+	if (validate_map(data) != 0)
 		return (1);
 	return (0);
 }
 
-int	cb_get_map_height(t_list *head)
+int	get_map_height(t_list *head)
 {
 	int		i;
 	char	*line;

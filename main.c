@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cb_main.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:03 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/14 15:32:01 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 12:00:13 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	validate_args(int argc, char **argv)
 		errno = EINVAL;
 		return (perror("Error!\nMust be a readable file ending in .cub"), -1);
 	}
-	fd = open (argv[1], O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
 		errno = EBADF;
@@ -42,6 +42,6 @@ int	main(int argc, char **argv)
 		return (0);
 	data = &(t_data){0};
 	head = ft_read_file(fd, FT_LST | FT_NON);
-	cb_load_params(head, data);
+	load_params(head, data);
 	ft_lstclear(&head, free);
 }

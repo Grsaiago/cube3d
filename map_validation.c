@@ -1,47 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cb_map_validation.c                                :+:      :+:    :+:   */
+/*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:55:49 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/26 14:16:21 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 11:59:24 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./cub3d.h"
 
-int		cb_validate_map(t_data *data);
-int		cb_validate_top_bottom(t_data *data);
-int		cb_validate_sides(t_data *data);
-int		cb_validate_interior(t_data *data);
-void	cb_get_above_below(t_data *data, int line_numb, int *above, int *below);
-static int	cb_player_p(t_data *data, const char c);
+int		validate_map(t_data *data);
+int		validate_top_bottom(t_data *data);
+int		validate_sides(t_data *data);
+int		validate_interior(t_data *data);
+void	get_above_below(t_data *data, int line_numb, int *above, int *below);
+int		player_p(t_data *data, const char c);
 
-/* A validação agora tá indo char por char e rodanddo a cb_validate_interior..
- * Essa validate interior sempre recalcula above e below,
- * seria mais inteligente chamar uma função que faz isso no final de um while
- * e dentro do while, caso o caracter seja 0 ela faz aquela checagem que
- * o gguedes falou.
- * Melhor fazer isso pra parte de dentro do mapa e a parte de cima e debaixo 
- * só faz um if (strchr("1 ", line[i] == NULL)){return (erro)}else{i++};
- */
-
-int	cb_validate_map(t_data *data)
+int	validate_map(t_data *data)
 {
 
-	if (cb_validate_top_bottom(data))
+	if (validate_top_bottom(data))
 		return (1);
-	else if (cb_validate_sides(data))
+	else if (validate_sides(data))
 		return (1);
-	else if (cb_validate_interior(data))
+	else if (validate_interior(data))
 		return (1);
 	return (0);
 	
 }
 
-int	cb_validate_top_bottom(t_data *data)
+int	validate_top_bottom(t_data *data)
 {
 	char	*line;
 
@@ -62,7 +53,7 @@ int	cb_validate_top_bottom(t_data *data)
 	return (0);
 }
 
-int	cb_validate_sides(t_data *data)
+int	validate_sides(t_data *data)
 {
 	char	*line;
 	int		i;
@@ -81,7 +72,7 @@ int	cb_validate_sides(t_data *data)
 	return (0);
 }
 
-int	cb_validate_interior(t_data *data)
+int	validate_interior(t_data *data)
 {
 	int		line_numb;
 	char	*line;
@@ -93,7 +84,7 @@ int	cb_validate_interior(t_data *data)
 	line = data->map[1];
 	while (line && line_numb < data->map_height)
 	{
-		cb_get_above_below(data, line_numb, &above, &below);
+		get_above_below(data, line_numb, &above, &below);
 		i = 0;
 		while (line[++i] && (i < (int)ft_strlen(line) - 1))
 		{
@@ -102,7 +93,7 @@ int	cb_validate_interior(t_data *data)
 				|| data->map[line_numb + 1][i] == ' '
 				|| line[i - 1] == ' ' || line[i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);
-			else if (ft_strchr("NSWE", line[i]) && cb_player_p(data, line[i]))
+			else if (ft_strchr("NSWE", line[i]) && player_p(data, line[i]))
 				return (1);
 		}
 		line_numb++;
@@ -111,7 +102,7 @@ int	cb_validate_interior(t_data *data)
 	return (0);
 }
 
-void	cb_get_above_below(t_data *data, int line_numb, int *above, int *below)
+void	get_above_below(t_data *data, int line_numb, int *above, int *below)
 {
 	if (line_numb == 0)
 		*above = 0;
@@ -124,7 +115,7 @@ void	cb_get_above_below(t_data *data, int line_numb, int *above, int *below)
 	return ;
 }
 
-static int	cb_player_p(t_data *data, const char c)
+int	player_p(t_data *data, const char c)
 {
 	if (data->spawn_dir)
 		return (perror("Error!\nPlayer spawn double definition"), 1);
