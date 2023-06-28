@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 14:33:58 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/13 16:40:50 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/20 14:14:57 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char			**ft_aux_lst_to_mat(t_list *node);
 
 void	*ft_read_file(int fd, int flags)
 {
-	union u_read	u;
+	union u_read_structure	u;
 
 	if (fd < 0)
 		return (NULL);

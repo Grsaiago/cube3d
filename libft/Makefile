@@ -6,7 +6,7 @@
 #    By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/31 18:35:35 by gsaiago           #+#    #+#              #
-#    Updated: 2023/06/13 19:49:42 by gsaiago          ###   ########.fr        #
+#    Updated: 2023/06/27 20:31:34 by gsaiago          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS =  ./ft_isalpha.c\
 		./ft_atoi.c\
 		./ft_calloc.c\
 		./ft_realloc.c\
+		./ft_valloc.c\
 		./ft_strdup.c\
 		./ft_strndup.c\
 		./ft_putstr_fd.c\

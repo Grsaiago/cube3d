@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 18:23:47 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/13 19:49:24 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/27 20:31:23 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum e_read
 };
 
 /* read_file enum */
-union u_read
+union u_read_structure
 {
 	char			*str;
 	void			*err;
@@ -120,6 +120,7 @@ int				ft_mat_size(char **mat);
 char			*ft_revstring(char *str);
 void			*ft_read_file(int fd, int flags);
 int				ft_isnumstr(char *str);
+void			*ft_valloc(unsigned int size);
 /* SMART POINTERS */
 /* Ussage: <variable_name>__attribute__((cleanup(free_call))); */
 void			sfree(void *ptr);
