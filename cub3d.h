@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 14:13:51 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:51:20 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_data
 	int		cok;
 	char	**map;
 	int		map_height;
-	char	spawn_dir;
+	char	spawn_direction;
 }	t_data;
 
 /* info validation */

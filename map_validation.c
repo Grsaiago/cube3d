@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 17:55:49 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 14:24:37 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/06/28 14:51:19 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ void	get_above_below(t_data *data, int line_numb, int *above, int *below)
 
 int	player_p(t_data *data, const char c)
 {
-	if (data->spawn_dir)
+	if (data->spawn_direction)
 		return (perror("Error!\nPlayer spawn double definition"), 1);
-	data->spawn_dir = c;
+	data->spawn_direction = c;
 	return (0);
 }
