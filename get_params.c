@@ -65,16 +65,11 @@ int	load_params(t_list *lst, t_data *data)
 			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
 			|| (load_map(lst, data) != 0))
 		{
-			if (data->no)
-				free(data->no);
-			if (data->so)
-				free(data->so);
-			if (data->we)
-				free(data->we);
-			if (data->ea)
-				free(data->ea);
-			if (data->map)
-				ft_free_mat(data->map);
+			free(data->no);
+			free(data->so);
+			free(data->we);
+			free(data->ea);
+			ft_free_mat(data->map);
 			return (1);
 		}
 		lst = lst->next;

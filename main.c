@@ -40,7 +40,7 @@ int	main(int argc, char **argv)
 	fd = validate_args(argc, argv);
 	if (fd < 0)
 		return (0);
-	ft_memset(&data, 0, sizeof(t_data));
+	data = (t_data){0};
 	head = ft_read_file(fd, FT_LST | FT_NON);
 	load_params(head, &data);
 	ft_lstclear(&head, free);
