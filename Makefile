@@ -16,9 +16,15 @@ CC = cc
 
 SRC_PATH = ./src/
 
-LIBFT_PATH = ./include/libft
-
 INCLUDE_PATH = ./include/
+
+MLX_PATH =	$(INCLUDE_PATH)minilibx-linux
+
+MLX =	$(MLX_PATH)minilibx-linux/libmlx.a
+
+MLX_LINK = -L$(MLX_PATH) -lmlx
+
+LIBFT_PATH = $(INCLUDE_PATH)libft
 
 LIBFT = $(LIBFT_PATH)/libft.a
 
@@ -36,16 +42,20 @@ HEADERS =	$(INCLUDE_PATH)cub3d.h
 
 all: $(NAME)
 
-$(NAME): $(SRCS) $(HEADERS) $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) $(LIBFT_LINK)
+$(NAME): $(SRCS) $(HEADERS) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) $(LIBFT_LINK) $(MLX_LINK)
 
 $(LIBFT): 
 	make -C $(LIBFT_PATH)
+
+$(MLX):
+	make -C $(MLX_PATH)
 
 clean:
 	rm -f $(NAME)
 	rm -rf $(NAME).dSYM
 	make clean -C $(LIBFT_PATH)
+	make clean -C $(MLX_PATH)
 
 re: clean all
 
