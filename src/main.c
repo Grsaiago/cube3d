@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./cub3d.h"
+#include "../include/cub3d.h"
 
 int	validate_args(int argc, char **argv)
 {

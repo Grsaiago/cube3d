@@ -14,7 +14,11 @@ NAME = cub3d
 
 CC = cc
 
-LIBFT_PATH = ./libft
+SRC_PATH = ./src/
+
+LIBFT_PATH = ./include/libft
+
+INCLUDE_PATH = ./include/
 
 LIBFT = $(LIBFT_PATH)/libft.a
 
@@ -22,13 +26,13 @@ LIBFT_LINK = -L$(LIBFT_PATH) -lft
 
 CFLAGS = -g -Wall -Wextra -Werror
 
-SRCS = ./main.c \
-	   ./get_params.c \
-	   ./map_validation.c \
+SRCS = $(SRC_PATH)main.c \
+	   $(SRC_PATH)get_params.c \
+	   $(SRC_PATH)map_validation.c \
 
 #$(wildcard *.c)
 
-HEADERS =
+HEADERS =	$(INCLUDE_PATH)cub3d.h
 
 all: $(NAME)
 

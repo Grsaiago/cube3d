@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./cub3d.h"
+#include "../include/cub3d.h"
 
 int	mat_to_rgb(char **mat, t_rgb *rgb)
 {
