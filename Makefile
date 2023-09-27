@@ -43,7 +43,7 @@ HEADERS =	$(INCLUDE_PATH)cub3d.h
 all: $(NAME)
 
 $(NAME): $(SRCS) $(HEADERS) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) $(LIBFT_LINK) $(MLX_LINK)
+	$(CC) $(CFLAGS) $(SRCS) $(LIBFT_LINK) $(MLX_LINK) -o -lft -lmlx -lXext -lX11 -lm -o $(NAME)
 
 $(LIBFT): 
 	make -C $(LIBFT_PATH)

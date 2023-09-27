@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+#include "../include/minilibx-linux/mlx.h"
 
 int	mat_to_rgb(char **mat, t_rgb *rgb)
 {
@@ -290,4 +291,17 @@ int	get_map_height(t_list *head)
 	if (i < 3)
 		return (perror("Error!\nThe map must have at least 3 lines"), -1);
 	return (i);
+}
+
+int	load_texture(char *path, t_texture *texture)
+{
+}
+
+int	init_mlx_instances(t_data *data)
+{
+	char	*tmp;
+
+	data->mlx = mlx_init();
+	data->scene.no = mlx_xpm_file_to_image(data->mlx, "../textures/brick.xpm", 
+	return (0);
 }

@@ -42,6 +42,15 @@ int	main(int argc, char **argv)
 		return (0);
 	data = (t_data){0};
 	head = ft_read_file(fd, FT_LST | FT_NON);
-	load_params(head, &data);
+	load_params(head, &data); // tem que guardar o x e y de spawn do player
+	// settar as imagens da mlx (o load_texture deles)
+	// settar a posição do player igual o set_player_direction (pensa num plano cartesiano pra esses x y)
+	// settar a câmera do player igual o set_camera_plane deles. Isso setta o FOV
+	// settar o a posição do player igual o set_player_position deles. O player->pos_x += 0.5 é pra spawnar no meio do quadrado
+	// image_init deles p/criar a primeira imagem - abrir a janela, cirar uma nova imagem (pq não podemos jogar os pixels na tela), 
+	// hooks_init vai inicializar as os hooks de tecla e chamar a mlx_loop_hook pra executar sempre a função 'hook' passando o data como parametro pra ela.
+	// na hooks init ele tem os hooks de keypressed e keyreleased, que são usados pra saber se o player tá andando e
+	// pra qual direção ele está andando. Esses walk_direction e turn_direction são usados na update_player p/calcular a
+	// nova posição.
 	ft_lstclear(&head, free);
 }
