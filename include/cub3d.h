@@ -19,6 +19,7 @@
 # include <errno.h>
 # include <math.h>
 # include <stdio.h>
+# include <stdbool.h>
 
 /* __________Defines__________ */
 
@@ -47,9 +48,13 @@ typedef struct s_rgb
 typedef struct s_texture
 {
 	char	*path;
-	void	*text;
+	void	*img_ptr;
 	int		*addr;
 	int		bpp;
+	int		height;
+	int		width;
+	int		size_len;
+	int		endian;
 }	t_texture;
 
 typedef struct s_scene
@@ -65,23 +70,23 @@ typedef struct s_scene
 
 typedef struct s_data
 {
-	void		*no;
-	void		*so;
-	void		*we;
-	void		*ea;
-	t_rgb		f;
-	t_rgb		c;
-	int			fok;
-	int			cok;
-	char		**map;
-	int			map_height;
-	char		spawn_direction;
-	void		*mlx;
-	void		*window;
-	t_scene		scene;
+	t_texture		no_texture;
+	t_texture		so_texture;
+	t_texture		we_texture;
+	t_texture		ea_texture;
+	t_rgb			f;
+	t_rgb			c;
+	int				fok;
+	int				cok;
+	char			**map;
+	unsigned int	map_width;
+	unsigned int	map_height;
+	char			spawn_direction;
+	void			*mlx;
+	void			*window;
 }	t_data;
 
-/* info validation */
+/* info validation / loading */
 int		load_params(t_list *lst, t_data *data);
 int		load_no(t_list *head, t_data *data);
 int		load_so(t_list *head, t_data *data);
@@ -91,6 +96,8 @@ int		load_f(t_list *head, t_data *data);
 int		load_c(t_list *head, t_data *data);
 int		mat_to_rgb(char **mat, t_rgb *rgb);
 int		load_map(t_list *head, t_data *data);
+bool	init_mlx_image(t_texture *texture, void *mlx);
+bool	init_mlx_instances(t_data *data);
 /* map validation */
 int		validate_map(t_data *data);
 int		validate_top_bottom(t_data *data);
@@ -98,5 +105,7 @@ int		validate_sides(t_data *data);
 int		validate_interior(t_data *data);
 void	get_above_below(t_data *data, int line_numb, int *above, int *below);
 int		get_map_height(t_list *head);
+/* deletion */
+void	free_texture(t_data *data, t_texture *texture);
 
 #endif

@@ -66,18 +66,21 @@ int	load_params(t_list *lst, t_data *data)
 			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
 			|| (load_map(lst, data) != 0))
 		{
-			free(data->no);
-			free(data->so);
-			free(data->we);
-			free(data->ea);
+			free(data->no_texture.path);
+			free(data->so_texture.path);
+			free(data->we_texture.path);
+			free(data->ea_texture.path);
 			ft_free_mat(data->map);
 			return (1);
 		}
 		lst = lst->next;
 	}
-	if (!data->no || !data->so || !data->we || !data->ea
+	if (!data->no_texture.path || !data->so_texture.path
+		|| !data->we_texture.path || !data->ea_texture.path
 		|| !data->fok || !data->cok || !data->map)
 		return (perror("Error!\nUndefined param"), 1);
+	if (init_mlx_instances(data) != 0)
+		return (1);
 	return (0);
 }
 
@@ -85,12 +88,12 @@ int	load_no(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->no && !(head->content[0] == '\0'
+	if (!data->no_texture.path && !(head->content[0] == '\0'
 			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "NO ", 3) != 0)
 		return (0);
-	if (data->no)
+	if (data->no_texture.path)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of no"), 1);
@@ -98,7 +101,7 @@ int	load_no(t_list *head, t_data *data)
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->no = mat[1];
+	data->no_texture.path = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -108,12 +111,12 @@ int	load_so(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->so && !(head->content[0] == '\0'
+	if (!data->so_texture.path && !(head->content[0] == '\0'
 			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "SO ", 3) != 0)
 		return (0);
-	if (data->so)
+	if (data->so_texture.path)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of so"), 1);
@@ -121,7 +124,7 @@ int	load_so(t_list *head, t_data *data)
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->so = mat[1];
+	data->so_texture.path = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -131,12 +134,12 @@ int	load_we(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->we && !(head->content[0] == '\0'
+	if (!data->we_texture.path && !(head->content[0] == '\0'
 			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "WE ", 3) != 0)
 		return (0);
-	if (data->we)
+	if (data->we_texture.path)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of we"), 1);
@@ -144,7 +147,7 @@ int	load_we(t_list *head, t_data *data)
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->we = mat[1];
+	data->we_texture.path = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -154,12 +157,12 @@ int	load_ea(t_list *head, t_data *data)
 {
 	char	**mat;
 
-	if (!data->ea && !(head->content[0] == '\0'
+	if (!data->ea_texture.path && !(head->content[0] == '\0'
 			|| ft_strchr("NSWEFC", head->content[0])))
 		return (perror("Error!\nUndefined conf param"), 1);
 	if (ft_strncmp(head->content, "EA ", 3) != 0)
 		return (0);
-	if (data->ea)
+	if (data->ea_texture.path)
 	{
 		errno = EINVAL;
 		return (perror("Error!\nDouble definition of ea"), 1);
@@ -167,7 +170,7 @@ int	load_ea(t_list *head, t_data *data)
 	mat = ft_split(head->content, ' ');
 	if (validate_coordinate_size(mat, 2) != 0)
 		return (ft_free_mat(mat), 1);
-	data->ea = mat[1];
+	data->ea_texture.path = mat[1];
 	free(mat[0]);
 	free(mat);
 	return (0);
@@ -234,7 +237,7 @@ int	load_map(t_list *head, t_data *data)
 	char	*line;
 	int		aux;
 
-	if (!data->no || !data->so || !data->we || !data->ea
+	if (!data->no_texture.path || !data->so_texture.path || !data->we_texture.path || !data->ea_texture.path
 		|| !data->fok || !data->cok || data->map)
 		return (0);
 	data->map_height = get_map_height(head);
@@ -293,15 +296,41 @@ int	get_map_height(t_list *head)
 	return (i);
 }
 
-int	load_texture(char *path, t_texture *texture)
+bool	init_mlx_instances(t_data *data)
 {
+	data->mlx = mlx_init();
+	if (!data->mlx || init_mlx_image(&data->no_texture, data->mlx)
+		|| init_mlx_image(&data->so_texture, data->mlx)
+		|| init_mlx_image(&data->we_texture, data->mlx)
+		|| init_mlx_image(&data->ea_texture, data->mlx))
+	{
+		errno = EINVAL;
+		free_texture(data, &data->no_texture);
+		free_texture(data, &data->so_texture);
+		free_texture(data, &data->we_texture);
+		free_texture(data, &data->ea_texture);
+		ft_free_mat(data->map);
+		return (perror("Error! something went wrong on img initialization"), 1);
+	}
+	return (false);
 }
 
-int	init_mlx_instances(t_data *data)
+bool	init_mlx_image(t_texture *texture, void *mlx)
 {
-	char	*tmp;
-
-	data->mlx = mlx_init();
-	data->scene.no = mlx_xpm_file_to_image(data->mlx, "../textures/brick.xpm", 
+	texture->img_ptr = mlx_xpm_file_to_image(mlx, texture->path, &texture->width, &texture->height);
+	if (texture->img_ptr == NULL)
+		return (true);
+	texture->addr = (int *)mlx_get_data_addr(texture->img_ptr, &texture->bpp,
+			&texture->size_len, &texture->endian);
 	return (0);
+}
+
+void	free_texture(t_data *data, t_texture *texture)
+{
+	free(texture->path);
+	if (texture->img_ptr)
+		mlx_destroy_image(data->mlx, texture->img_ptr);
+	if (texture->addr)
+		free(texture->addr);
+	return ;
 }
