@@ -13,6 +13,9 @@
 #include "../include/cub3d.h"
 #include "../include/minilibx-linux/mlx.h"
 
+int		get_map_width(t_list *head);
+void	image_init(t_data *data);
+
 int	mat_to_rgb(char **mat, t_rgb *rgb)
 {
 	rgb->r = ft_atoi(mat[0]);
@@ -81,6 +84,7 @@ int	load_params(t_list *lst, t_data *data)
 		return (perror("Error!\nUndefined param"), 1);
 	if (init_mlx_instances(data) != 0)
 		return (1);
+	image_init(data);
 	return (0);
 }
 
@@ -241,6 +245,7 @@ int	load_map(t_list *head, t_data *data)
 		|| !data->fok || !data->cok || data->map)
 		return (0);
 	data->map_height = get_map_height(head);
+	data->map_width = get_map_width(head);
 	if (data->map_height < 0)
 		return (1);
 	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
@@ -267,6 +272,21 @@ int	load_map(t_list *head, t_data *data)
 	if (validate_map(data) != 0)
 		return (1);
 	return (0);
+}
+
+int	get_map_width(t_list *head)
+{
+	unsigned int	max_len;
+	unsigned int	aux_len;
+
+	max_len = 0;
+	while (head)
+	{
+		aux_len = ft_strlen(head->content);
+		max_len = ((aux_len > max_len) * aux_len) + ((max_len >= aux_len) * max_len);
+		head = head->next;
+	}
+	return (max_len);
 }
 
 int	get_map_height(t_list *head)
@@ -296,10 +316,12 @@ int	get_map_height(t_list *head)
 	return (i);
 }
 
+// load and free of mlx instances
 bool	init_mlx_instances(t_data *data)
 {
 	data->mlx = mlx_init();
-	if (!data->mlx || init_mlx_image(&data->no_texture, data->mlx)
+	if (!data->mlx
+		|| init_mlx_image(&data->no_texture, data->mlx)
 		|| init_mlx_image(&data->so_texture, data->mlx)
 		|| init_mlx_image(&data->we_texture, data->mlx)
 		|| init_mlx_image(&data->ea_texture, data->mlx))
@@ -332,5 +354,18 @@ void	free_texture(t_data *data, t_texture *texture)
 		mlx_destroy_image(data->mlx, texture->img_ptr);
 	if (texture->addr)
 		free(texture->addr);
+	return ;
+}
+
+// initialization on painting on screen
+
+void	image_init(t_data *data)
+{
+	data->window = mlx_new_window(data->mlx,
+			WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+	data->image.img = mlx_new_image(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data->image.addr = mlx_get_data_addr(data->image.img,
+			&data->image.bpp, &data->image.size_len, &data->image.endian);
+	mlx_put_image_to_window(data->mlx, data->window, data->image.img, 0, 0);
 	return ;
 }

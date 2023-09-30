@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 
 CC = cc
 
@@ -20,7 +20,7 @@ INCLUDE_PATH = ./include/
 
 MLX_PATH =	$(INCLUDE_PATH)minilibx-linux
 
-MLX =	$(MLX_PATH)minilibx-linux/libmlx.a
+MLX =	$(MLX_PATH)/libmlx.a
 
 MLX_LINK = -L$(MLX_PATH) -lmlx
 

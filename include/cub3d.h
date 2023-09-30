@@ -57,16 +57,14 @@ typedef struct s_texture
 	int		endian;
 }	t_texture;
 
-typedef struct s_scene
+typedef struct s_image
 {
-	t_texture		no;
-	t_texture		so;
-	t_texture		we;
-	t_texture		ea;
-	unsigned int	map_width;
-	unsigned int	map_height;
-	char			**map;
-}	t_scene;
+	void	*img;
+	void	*addr;
+	int		bpp;
+	int		size_len;
+	int		endian;
+}	t_image;
 
 typedef struct s_data
 {
@@ -79,9 +77,14 @@ typedef struct s_data
 	int				fok;
 	int				cok;
 	char			**map;
-	unsigned int	map_width;
-	unsigned int	map_height;
+	int				map_width;
+	int				map_height;
 	char			spawn_direction;
+	double			player_x;
+	double			player_y;
+	double			dir_x;
+	double			dir_y;
+	t_image			image;
 	void			*mlx;
 	void			*window;
 }	t_data;

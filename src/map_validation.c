@@ -17,7 +17,8 @@ int		validate_top_bottom(t_data *data);
 int		validate_sides(t_data *data);
 int		validate_interior(t_data *data);
 void	get_above_below(t_data *data, int line_numb, int *above, int *below);
-int		player_p(t_data *data, const char c);
+int		player_p(t_data *data, const char c, int width, int height);
+void	set_player_direction(t_data *data);
 
 int	validate_map(t_data *data)
 {
@@ -91,12 +92,14 @@ int	validate_interior(t_data *data)
 				|| data->map[line_numb + 1][i] == ' '
 				|| line[i - 1] == ' ' || line[i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);
-			else if (ft_strchr("NSWE", line[i]) && player_p(data, line[i]))
+			else if (ft_strchr("NSWE", line[i]) && player_p(data, line[i], i, line_numb))
 				return (1);
 		}
 		line_numb++;
 		line = data->map[line_numb];
 	}
+	if (data->player_x == -1 || data->player_y == -1)
+		return (perror("Error! Invalid or no player position"), 1);
 	return (0);
 }
 
@@ -113,10 +116,38 @@ void	get_above_below(t_data *data, int line_numb, int *above, int *below)
 	return ;
 }
 
-int	player_p(t_data *data, const char c)
+int	player_p(t_data *data, const char c, int width, int height)
 {
 	if (data->spawn_direction)
 		return (perror("Error!\nPlayer spawn double definition"), 1);
 	data->spawn_direction = c;
+	data->player_x = width + 0.5;
+	data->player_y = height + 0.5;
+	set_player_direction(data);
 	return (0);
+}
+
+void	set_player_direction(t_data *data)
+{
+	if (data->spawn_direction == 'N')
+	{
+		data->dir_x = 0;
+		data->dir_y = -1;
+	}
+	else if (data->spawn_direction == 'S')
+	{
+		data->dir_x = 0;
+		data->dir_y = 1;
+	}
+	else if (data->spawn_direction == 'W')
+	{
+		data->dir_x = -1;
+		data->dir_y = 0;
+	}
+	else if (data->spawn_direction == 'E')
+	{
+		data->dir_x = 1;
+		data->dir_y = 0;
+	}
+	return ;
 }
