@@ -332,6 +332,7 @@ bool	init_mlx_instances(t_data *data)
 		free_texture(data, &data->we_texture);
 		free_texture(data, &data->ea_texture);
 		ft_free_mat(data->map);
+		free(data->mlx);
 		return (perror("Error! something went wrong on img initialization"), 1);
 	}
 	return (false);
@@ -352,8 +353,6 @@ void	free_texture(t_data *data, t_texture *texture)
 	free(texture->path);
 	if (texture->img_ptr)
 		mlx_destroy_image(data->mlx, texture->img_ptr);
-	if (texture->addr)
-		free(texture->addr);
 	return ;
 }
 
