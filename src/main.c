@@ -13,6 +13,18 @@
 #include "../include/cub3d.h"
 
 void	initialize_data(t_data *data);
+int		key_pressed(int keycode, t_data *data);
+int 	close_window(t_data *data);
+
+static void	hooks_init(t_data *data)
+{
+	mlx_do_key_autorepeatoff(data->mlx);
+	mlx_hook(data->window, 2, 1L << 0, key_pressed, data);
+	mlx_hook(data->window, 17, 0L << 0, close_window, data);
+	// mlx_hook(data->win, 3, 1L << 1, key_released, data);
+	// mlx_loop_hook(data->mlx_ptr, hook, data);
+	mlx_loop(data->mlx);
+}
 
 int	validate_args(int argc, char **argv)
 {
@@ -63,5 +75,30 @@ int	main(int argc, char **argv)
 	// na hooks init ele tem os hooks de keypressed e keyreleased, que são usados pra saber se o player tá andando e
 	// pra qual direção ele está andando. Esses walk_direction e turn_direction são usados na update_player p/calcular a
 	// nova posição.
+	hooks_init(&data);
 	ft_lstclear(&head, free);
+}
+
+int	close_window(t_data *data)
+{
+	mlx_destroy_image(data->mlx, data->image.img);
+	mlx_destroy_window(data->mlx, data->window);
+	exit(EXIT_SUCCESS);
+}
+
+int	key_pressed(int keycode, t_data *data)
+{
+	if (keycode == ESC)
+		close_window(data);
+	/*
+	else if (keycode == W)
+		player->walk_direction++;
+	else if (keycode == A)
+		player->turn_direction--;
+	else if (keycode == S)
+		player->walk_direction--;
+	else if (keycode == D)
+		player->turn_direction++;
+		*/
+	return (0);
 }
