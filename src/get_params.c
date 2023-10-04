@@ -15,6 +15,9 @@
 
 int		get_map_width(t_list *head);
 void	image_init(t_data *data);
+void	raycast(t_data *data);
+void	paint_image(t_data *data);
+void    put_pixel(t_image *image, int x, int y, unsigned int color);
 
 int	mat_to_rgb(char **mat, t_rgb *rgb)
 {
@@ -365,6 +368,143 @@ void	image_init(t_data *data)
 	data->image.img = mlx_new_image(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->image.addr = mlx_get_data_addr(data->image.img,
 			&data->image.bpp, &data->image.size_len, &data->image.endian);
+	paint_image(data);
 	mlx_put_image_to_window(data->mlx, data->window, data->image.img, 0, 0);
 	return ;
+}
+
+void	raycast(t_data *data)
+{
+	for (int x = 0; x < WINDOW_WIDTH; x++)
+    {
+	// DAQUI
+      //calculate ray position and direction
+      double cameraX = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
+      double rayDirX = data->dir_x + data->plane_x * cameraX;
+      double rayDirY = data->dir_y + data->plane_y * cameraX;
+
+      //which box of the map we're in
+      int mapX = data->player_x;
+      int mapY = data->player_y;
+
+      //length of ray from current position to next x or y-side
+      double sideDistX;
+      double sideDistY;
+
+       //length of ray from one x or y-side to next x or y-side
+      double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
+      double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+	  // ATÉ AQUI JOGA NUMA START RAY
+
+      //what direction to step in x or y-direction (either +1 or -1)
+      int stepX;
+      int stepY;
+
+      int side; //was a NS or a EW wall hit?
+
+	  // DAQUI
+      //calculate step and initial sideDist
+      if (rayDirX < 0)
+      {
+        stepX = -1;
+        sideDistX = (data->player_x - mapX) * deltaDistX;
+      }
+      else
+      {
+        stepX = 1;
+        sideDistX = (mapX + 1.0 - data->player_x) * deltaDistX;
+      }
+      if (rayDirY < 0)
+      {
+        stepY = -1;
+        sideDistY = (data->player_y - mapY) * deltaDistY;
+      }
+      else
+      {
+        stepY = 1;
+        sideDistY = (mapY + 1.0 - data->player_y) * deltaDistY;
+      }
+	  // ATÉ AQUI FAZ NUMA SET RAY DIRECTION
+
+      //perform DDA
+      while ("Odeio raycast")
+      {
+        //jump to next map square, either in x-direction, or in y-direction
+        if (sideDistX < sideDistY)
+        {
+          sideDistX += deltaDistX;
+          mapX += stepX;
+          side = 0;
+        }
+        else
+        {
+          sideDistY += deltaDistY;
+          mapY += stepY;
+          side = 1;
+        }
+        //Check if ray has hit a wall
+        if (data->map[mapX][mapY] == '1') break;
+      }
+
+	  if (side == 0)
+		  data->dist_buffer[x] = (sideDistX - deltaDistX);
+	  else
+		  data->dist_buffer[x] = (sideDistY - deltaDistY);
+	  int color = 0xFF0000;
+	  int lineHeight = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
+
+	  //calculate lowest and highest pixel to fill in current stripe
+	  //ISSO AQUI PRA BAIXO TAVA NA PAINT IMAGE
+	  int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
+	  if (drawStart < 0)
+		  drawStart = 0;
+	  int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
+	  if (drawEnd >= WINDOW_HEIGHT)
+		  drawEnd = WINDOW_HEIGHT - 1;
+	  if (side == 1) {color = color / 2;}
+	  for (int y = drawStart; y < drawEnd; y++)
+		  put_pixel(&data->image, x, y, color);
+	}
+	printf("Posição do player: %lf e %lf\n", data->player_x, data->player_y);
+	//Calculate height of line to draw on screen
+	return ;
+}
+
+// TÁ INLINE NA RAYCAST
+void	paint_image(t_data *data)
+{
+	//Calculate height of line to draw on screen
+	int color = 0xFF0000;
+	raycast(data);
+	for (int x = 0; x < WINDOW_WIDTH; x++)
+	{
+		int lineHeight = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
+
+		//calculate lowest and highest pixel to fill in current stripe
+		int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
+		if (drawStart < 0)
+			drawStart = 0;
+		int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
+		if (drawEnd >= WINDOW_HEIGHT)
+			drawEnd = WINDOW_HEIGHT - 1;
+		for (int y = drawStart; y < drawEnd; y++)
+			put_pixel(&data->image, x, y, color);
+	}
+	return ;
+}
+
+void    put_pixel(t_image *image, int x, int y, unsigned int color)
+{
+	char    *dst;
+
+    dst = image->addr + (y * image->size_len + x * (image->bpp / 8));
+    *(unsigned int *)dst = color;
+}
+
+int	hook(t_data *data)
+{
+	mlx_clear_window(data->mlx, data->window);
+	raycast(data);
+	mlx_put_image_to_window(data->mlx, data->window, data->image.img, 0, 0);
+	return (0);
 }

@@ -84,7 +84,10 @@ typedef struct s_data
 	double			player_y;
 	double			dir_x;
 	double			dir_y;
+	double			plane_x;
+	double			plane_y;
 	t_image			image;
+	double			dist_buffer[WINDOW_WIDTH];
 	void			*mlx;
 	void			*window;
 }	t_data;

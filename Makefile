@@ -30,7 +30,7 @@ LIBFT = $(LIBFT_PATH)/libft.a
 
 LIBFT_LINK = -L$(LIBFT_PATH) -lft
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g 
 
 SRCS = $(SRC_PATH)main.c \
 	   $(SRC_PATH)get_params.c \
