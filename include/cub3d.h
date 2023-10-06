@@ -86,6 +86,9 @@ typedef struct s_data
 	double			dir_y;
 	double			plane_x;
 	double			plane_y;
+	char			rayHitDirection;
+	double			wall_x;
+	int				texture_x;
 	t_image			image;
 	double			dist_buffer[WINDOW_WIDTH];
 	void			*mlx;

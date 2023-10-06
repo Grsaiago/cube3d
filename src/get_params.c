@@ -16,7 +16,7 @@
 int		get_map_width(t_list *head);
 void	image_init(t_data *data);
 void	raycast(t_data *data);
-void	paint_image(t_data *data, int x);
+void	paint_image(t_data *data, int x, t_texture *image_to_paint);
 void    put_pixel(t_image *image, int x, int y, unsigned int color);
 
 int	mat_to_rgb(char **mat, t_rgb *rgb)
@@ -402,6 +402,7 @@ void	raycast(t_data *data)
 
       int side; //was a NS or a EW wall hit?
 
+	  t_texture	*image_to_paint;
 	  // DAQUI
       //calculate step and initial sideDist
       if (rayDirX < 0)
@@ -446,19 +447,53 @@ void	raycast(t_data *data)
         if (data->map[mapY][mapX] == '1') break;
       }
 	  if (side == 0)
+	  {
 		  data->dist_buffer[x] = (sideDistX - deltaDistX);
+		  if (sideDistX < 0)
+			  data->rayHitDirection = 'W';
+		  else
+			  data->rayHitDirection = 'E';
+	  }
 	  else
+	  {
 		  data->dist_buffer[x] = (sideDistY - deltaDistY);
+		  if (sideDistY < 0)
+			  data->rayHitDirection = 'N';
+		  else
+			  data->rayHitDirection = 'S';
+	  }
 	  //calculate lowest and highest pixel to fill in current stripe
-	  paint_image(data, x);
+	  // Set texture position inline a partir daqui
+	  if (data->rayHitDirection == 'N' || data->rayHitDirection == 'S')
+		  data->wall_x = data->player_x + data->dist_buffer[x] * data->fok;
+	  else
+		  data->wall_x = data->player_y + data->dist_buffer[x] * rayDirY;
+	  data->wall_x -= (int)data->wall_x;
+	  if (data->rayHitDirection == 'N')
+		  image_to_paint = &data->no_texture;
+	  else if (data->rayHitDirection == 'S')
+		  image_to_paint = &data->so_texture;
+	  else if (data->rayHitDirection == 'W')
+		  image_to_paint = &data->we_texture;
+	  else if (data->rayHitDirection == 'E')
+		  image_to_paint = &data->ea_texture;
+	  data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
+	  if (data->rayHitDirection == 'S')
+		  data->texture_x = image_to_paint->width - data->texture_x - 1;
+	  else if (data->rayHitDirection == 'W')
+		  data->texture_x = image_to_paint->width - data->texture_x - 1;
+	  paint_image(data, x, image_to_paint);
 	}
 	//Calculate height of line to draw on screen
 	return ;
 }
 
-// TÁ INLINE NA RAYCAST
-void	paint_image(t_data *data, int x)
+void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 {
+	int		texture_y;
+	double	step;
+	double	texture_pos;
+
 	//Calculate height of line to draw on screen
 	int color = 0xFF0000;
 	int lineHeight = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
@@ -470,10 +505,43 @@ void	paint_image(t_data *data, int x)
 	int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
 	if (drawEnd >= WINDOW_HEIGHT)
 		drawEnd = WINDOW_HEIGHT - 1;
+	step = 1.0 * image_to_paint->height / lineHeight;
+	texture_pos = (int)(drawStart - WINDOW_HEIGHT / 2
+			+ lineHeight / 2) * step;
 	for (int y = drawStart; y < drawEnd; y++)
-		put_pixel(&data->image, x, y, color);
+    {
+        texture_y = (int)texture_pos & (image_to_paint->height - 1);
+        texture_pos += step;
+        color = image_to_paint->addr[(image_to_paint->height * texture_y + data->texture_x)];
+        put_pixel(&data->image, x, y, color);
+    }
+	// o draw start e o draw end são início de onde eu pinto até
+	// fim de onde eu pinto (no sentido vertical).
+	// Para pintar o teto e o chão é só eu fazer dois for,
+	// um de 0 até drawStart e outro de drawEnd até WINDOW_HEIGHT
 	return ;
 }
+
+// INLINE NA RAYCAST
+/*
+void    set_texture_position(t_data *data)
+{
+    if (data->rayHitDirection == 'N' || data->rayHitDirection == 'S')
+        info->wall_x = data->player_x + data->dist_buffer[x] * data->fok;
+    else
+        info->wall_x = player->pos_y + ray->distance * ray->dir_y;
+    info->wall_x -= (int)info->wall_x;
+    get_texture(data, ray, info);
+    info->texture_x = (int)(info->wall_x * (double)info->texture->width);
+    if (ray->hit_direction == 'S')
+        info->texture_x = info->texture->width - info->texture_x - 1;
+    if (ray->hit_direction == 'W')
+        info->texture_x = info->texture->width - info->texture_x - 1;
+    info->step = 1.0 * info->texture->height / info->line_height;
+    info->texture_pos = (info->wall_start - WINDOW_HEIGHT / 2
+            + info->line_height / 2) * info->step;
+}
+*/
 
 void    put_pixel(t_image *image, int x, int y, unsigned int color)
 {
