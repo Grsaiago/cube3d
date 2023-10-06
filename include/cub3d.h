@@ -82,6 +82,8 @@ typedef struct s_data
 	char			spawn_direction;
 	double			player_x;
 	double			player_y;
+	char			walk_direction;
+	char			turn_direction;
 	double			dir_x;
 	double			dir_y;
 	double			plane_x;

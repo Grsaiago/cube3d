@@ -94,15 +94,13 @@ int	key_pressed(int keycode, t_data *data)
 {
 	if (keycode == ESC)
 		close_window(data);
-	/*
 	else if (keycode == W)
-		player->walk_direction++;
+		data->walk_direction++;
 	else if (keycode == A)
-		player->turn_direction--;
+		data->turn_direction--;
 	else if (keycode == S)
-		player->walk_direction--;
+		data->walk_direction--;
 	else if (keycode == D)
-		player->turn_direction++;
-		*/
+		data->turn_direction++;
 	return (0);
 }

@@ -551,9 +551,38 @@ void    put_pixel(t_image *image, int x, int y, unsigned int color)
     *(unsigned int *)dst = color;
 }
 
+void    update_player(t_data *data)
+{
+    double    rotation;
+    double    old_dir_x;
+    double    old_plane_x;
+    double    new_x;
+    double    new_y;
+
+    rotation = data->turn_direction * ROTATION_SPEED;
+    old_dir_x = data->dir_x;
+    data->dir_x = data->dir_x
+        * cos(rotation) - data->dir_y * sin(rotation);
+    data->dir_y = old_dir_x * sin(rotation) + data->dir_y * cos(rotation);
+    old_plane_x = data->plane_x;
+    data->plane_x = data->plane_x
+        * cos(rotation) - data->plane_y * sin(rotation);
+    data->plane_y = old_plane_x
+        * sin(rotation) + data->plane_y * cos(rotation);
+    new_x = data->player_x
+        + data->walk_direction * (data->dir_x * MOVE_SPEED);
+    new_y = data->player_y
+        + data->walk_direction * (data->player_y * MOVE_SPEED);
+    if (data->map[(int)new_x][(int)data->player_y] != '1')
+        data->plane_x = new_x;
+    if (data->map[(int)data->player_x][(int)new_y] != '1')
+        data->plane_y = new_y;
+}
+
 int	hook(t_data *data)
 {
 	mlx_clear_window(data->mlx, data->window);
+	update_player(data);
 	raycast(data);
 	mlx_put_image_to_window(data->mlx, data->window, data->image.img, 0, 0);
 	return (0);
