@@ -27,8 +27,8 @@
 # define WINDOW_HEIGHT 480
 # define PLAYER_COLOR 0x0000ff
 # define RAY_COLOR 0xff0000
-# define MOVE_SPEED 0.04
-# define ROTATION_SPEED 0.04
+# define MOVE_SPEED 0.02
+# define ROTATION_SPEED 0.02
 
 #  define ESC 65307
 #  define W 119
@@ -72,8 +72,8 @@ typedef struct s_data
 	t_texture		so_texture;
 	t_texture		we_texture;
 	t_texture		ea_texture;
-	t_rgb			f;
-	t_rgb			c;
+	int				f_color;
+	int				c_color;
 	int				fok;
 	int				cok;
 	char			**map;
@@ -105,7 +105,7 @@ int		load_we(t_list *head, t_data *data);
 int		load_ea(t_list *head, t_data *data);
 int		load_f(t_list *head, t_data *data);
 int		load_c(t_list *head, t_data *data);
-int		mat_to_rgb(char **mat, t_rgb *rgb);
+int		mat_to_rgb(char **mat);
 int		load_map(t_list *head, t_data *data);
 bool	init_mlx_image(t_texture *texture, void *mlx);
 bool	init_mlx_instances(t_data *data);

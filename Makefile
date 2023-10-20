@@ -59,6 +59,12 @@ clean:
 
 re: clean all
 
+t: all
+	./$(NAME) maps/a.cub
+
+val: all
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) maps/a.cub
+
 fclean: clean
 	make fclean -C $(LIBFT_PATH)
 

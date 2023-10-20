@@ -19,12 +19,15 @@ void	raycast(t_data *data);
 void	paint_image(t_data *data, int x, t_texture *image_to_paint);
 void    put_pixel(t_image *image, int x, int y, unsigned int color);
 
-int	mat_to_rgb(char **mat, t_rgb *rgb)
+int	mat_to_rgb(char **mat)
 {
-	rgb->r = ft_atoi(mat[0]);
-	rgb->g = ft_atoi(mat[1]);
-	rgb->b = ft_atoi(mat[2]);
-	return (0);
+	int	rgb;
+
+	rgb = 0;
+	rgb |= ft_atoi(mat[0]) << 16;
+	rgb |= ft_atoi(mat[1]) << 8;
+	rgb |= ft_atoi(mat[2]) << 0;
+	return (rgb);
 }
 
 int	validate_coordinate_size(char **mat, int size)
@@ -205,7 +208,7 @@ int	load_f(t_list *head, t_data *data)
 	if (validate_coordinate_size(mat, 3)
 		|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
-	mat_to_rgb(mat, &data->f);
+	data->f_color = mat_to_rgb(mat);
 	ft_free_mat(mat);
 	data->fok = 1;
 	return (0);
@@ -233,7 +236,7 @@ int	load_c(t_list *head, t_data *data)
 	if (validate_coordinate_size(mat, 3)
 		|| validate_cf_numbers(mat))
 		return (ft_free_mat(mat), 1);
-	mat_to_rgb(mat, &data->c);
+	data->c_color = mat_to_rgb(mat);
 	ft_free_mat(mat);
 	data->cok = 1;
 	return (0);
@@ -449,7 +452,7 @@ void	raycast(t_data *data)
 	  if (side == 0)
 	  {
 		  data->dist_buffer[x] = (sideDistX - deltaDistX);
-		  if (sideDistX < 0)
+		  if (rayDirX < 0)
 			  data->rayHitDirection = 'W';
 		  else
 			  data->rayHitDirection = 'E';
@@ -457,7 +460,7 @@ void	raycast(t_data *data)
 	  else
 	  {
 		  data->dist_buffer[x] = (sideDistY - deltaDistY);
-		  if (sideDistY < 0)
+		  if (rayDirY < 0)
 			  data->rayHitDirection = 'N';
 		  else
 			  data->rayHitDirection = 'S';
@@ -465,7 +468,7 @@ void	raycast(t_data *data)
 	  //calculate lowest and highest pixel to fill in current stripe
 	  // Set texture position inline a partir daqui
 	  if (data->rayHitDirection == 'N' || data->rayHitDirection == 'S')
-		  data->wall_x = data->player_x + data->dist_buffer[x] * data->fok;
+		  data->wall_x = data->player_x + data->dist_buffer[x] * rayDirX;
 	  else
 		  data->wall_x = data->player_y + data->dist_buffer[x] * rayDirY;
 	  data->wall_x -= (int)data->wall_x;
@@ -508,6 +511,11 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	step = 1.0 * image_to_paint->height / lineHeight;
 	texture_pos = (int)(drawStart - WINDOW_HEIGHT / 2
 			+ lineHeight / 2) * step;
+	// pintar o teto e o chão antes dos lados pros lados sobreporem
+	for(int y = 0; y < drawStart; y++)
+		put_pixel(&data->image, x, y, data->c_color);
+	for (int y = drawEnd; y < WINDOW_HEIGHT; y++)
+		put_pixel(&data->image, x, y, data->f_color);
 	for (int y = drawStart; y < drawEnd; y++)
     {
         texture_y = (int)texture_pos & (image_to_paint->height - 1);
@@ -553,30 +561,24 @@ void    put_pixel(t_image *image, int x, int y, unsigned int color)
 
 void    update_player(t_data *data)
 {
-    double    rotation;
-    double    old_dir_x;
-    double    old_plane_x;
-    double    new_x;
-    double    new_y;
+	float rot_angle = data->turn_direction * ROTATION_SPEED;
+    float old_dir_x = data->dir_x;
+    float old_plane_x = data->plane_x;
 
-    rotation = data->turn_direction * ROTATION_SPEED;
-    old_dir_x = data->dir_x;
-    data->dir_x = data->dir_x
-        * cos(rotation) - data->dir_y * sin(rotation);
-    data->dir_y = old_dir_x * sin(rotation) + data->dir_y * cos(rotation);
-    old_plane_x = data->plane_x;
-    data->plane_x = data->plane_x
-        * cos(rotation) - data->plane_y * sin(rotation);
-    data->plane_y = old_plane_x
-        * sin(rotation) + data->plane_y * cos(rotation);
-    new_x = data->player_x
-        + data->walk_direction * (data->dir_x * MOVE_SPEED);
-    new_y = data->player_y
-        + data->walk_direction * (data->player_y * MOVE_SPEED);
-    if (data->map[(int)new_x][(int)data->player_y] != '1')
-        data->plane_x = new_x;
-    if (data->map[(int)data->player_x][(int)new_y] != '1')
-        data->plane_y = new_y;
+    data->dir_x = data->dir_x * cos(rot_angle) - data->dir_y * sin(rot_angle);
+    data->dir_y = old_dir_x * sin(rot_angle) + data->dir_y * cos(rot_angle);
+    data->plane_x = data->plane_x * cos(rot_angle) - data->plane_y * sin(rot_angle);
+    data->plane_y = old_plane_x * sin(rot_angle) + data->plane_y * cos(rot_angle);
+
+    float move_step = data->walk_direction * MOVE_SPEED;
+
+    float next_x = data->player_x + (data->dir_x * move_step);
+    float next_y = data->player_y + (data->dir_y * move_step);
+
+    if (data->map[(size_t)data->player_y][(size_t)next_x] != '1')
+        data->player_x = next_x;
+    if (data->map[(size_t)next_y][(size_t)data->player_x] != '1')
+        data->player_y = next_y;
 }
 
 int	hook(t_data *data)

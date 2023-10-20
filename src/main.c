@@ -14,6 +14,7 @@
 
 void	initialize_data(t_data *data);
 int		key_pressed(int keycode, t_data *data);
+int		key_released(int keycode, t_data *data);
 int 	close_window(t_data *data);
 void	image_init(t_data *data);
 int		hook(t_data *data);
@@ -23,7 +24,7 @@ static void	hooks_init(t_data *data)
 	mlx_do_key_autorepeatoff(data->mlx);
 	mlx_hook(data->window, 2, 1L << 0, key_pressed, data);
 	mlx_hook(data->window, 17, 0L << 0, close_window, data);
-	// mlx_hook(data->win, 3, 1L << 1, key_released, data);
+	mlx_hook(data->window, 3, 1L << 1, key_released, data);
 	mlx_loop_hook(data->mlx, hook, data);
 	mlx_loop(data->mlx);
 }
@@ -85,8 +86,14 @@ int	main(int argc, char **argv)
 __attribute__((noreturn))
 int	close_window(t_data *data)
 {
-	mlx_destroy_image(data->mlx, data->image.img);
 	mlx_destroy_window(data->mlx, data->window);
+	mlx_destroy_image(data->mlx, data->image.img);
+	free_texture(data, &data->no_texture);
+	free_texture(data, &data->so_texture);
+	free_texture(data, &data->we_texture);
+	free_texture(data, &data->ea_texture);
+	ft_free_mat(data->map);
+	free(data->mlx);
 	exit(EXIT_SUCCESS);
 }
 
@@ -97,9 +104,22 @@ int	key_pressed(int keycode, t_data *data)
 	else if (keycode == W)
 		data->walk_direction++;
 	else if (keycode == A)
-		data->turn_direction--;
+		data->turn_direction++;
 	else if (keycode == S)
 		data->walk_direction--;
+	else if (keycode == D)
+		data->turn_direction--;
+	return (0);
+}
+
+int	key_released(int keycode, t_data *data)
+{
+	if (keycode == W)
+		data->walk_direction--;
+	else if (keycode == A)
+		data->turn_direction--;
+	else if (keycode == S)
+		data->walk_direction++;
 	else if (keycode == D)
 		data->turn_direction++;
 	return (0);
