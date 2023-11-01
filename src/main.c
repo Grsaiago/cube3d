@@ -76,10 +76,10 @@ int	main(int argc, char **argv)
 		return (1);
 	// OK - settar as imagens da mlx (o load_texture deles)
 	// OK - settar a posição do player igual o set_player_direction (pensa num plano cartesiano pra esses x y)
-	//  TEM QUE FAZER -  settar a câmera do player igual o set_player_plane deles. Isso setta o FOV
+	// OK -  settar a câmera do player igual o set_player_plane deles. Isso setta o FOV
 	// OK - settar o a posição do player igual o set_player_position deles. O player->pos_x += 0.5 é pra spawnar no meio do quadrado
 	// OK - image_init deles p/criar a primeira imagem - abrir a janela, cirar uma nova imagem (pq não podemos jogar os pixels na tela), 
-	// hooks_init vai inicializar as os hooks de tecla e chamar a mlx_loop_hook pra executar sempre a função 'hook'
+	// OK - hooks_init vai inicializar as os hooks de tecla e chamar a mlx_loop_hook pra executar sempre a função 'hook'
 	// passando o data como parametro pra ela.
 	// na hooks init ele tem os hooks de keypressed e keyreleased, que são usados pra saber se o player tá andando e
 	// pra qual direção ele está andando. Esses walk_direction e turn_direction são usados na update_player p/calcular a
@@ -88,7 +88,6 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-__attribute__((noreturn))
 int	close_window(t_data *data)
 {
 	mlx_destroy_window(data->mlx, data->window);

@@ -21,6 +21,15 @@ int		player_p(t_data *data, const char c, int width, int height);
 void	set_player_direction(t_data *data);
 void	set_player_plane(t_data *data);
 
+typedef struct s_map_interior_validation_aux
+{
+	int		line_numb;
+	char	*line;
+	int		above;
+	int		below;
+	int		i;
+}	t_map_interior_validation_aux;
+
 int	validate_map(t_data *data)
 {
 	if (validate_top_bottom(data))
@@ -74,34 +83,31 @@ int	validate_sides(t_data *data)
 
 int	validate_interior(t_data *data)
 {
-	int		line_numb;
-	char	*line;
-	int		above;
-	int		below;
-	int		i;
+	t_map_interior_validation_aux	aux;
 
-	line_numb = 1;
-	line = data->map[1];
-	while (line && line_numb < data->map_height)
+	aux.line_numb = 1;
+	aux.line = data->map[1];
+	while (aux.line && aux.line_numb < data->map_height)
 	{
-		get_above_below(data, line_numb, &above, &below);
-		i = 0;
-		while (line[++i] && (i < (int)ft_strlen(line) - 1))
+		get_above_below(data, aux.line_numb, &aux.above, &aux.below);
+		aux.i = 0;
+		while (aux.line[++aux.i] && (aux.i < (int)ft_strlen(aux.line) - 1))
 		{
-			if (line[i] == '0' && (i > above || i > below
-					|| data->map[line_numb - 1][i] == ' '
-				|| data->map[line_numb + 1][i] == ' '
-				|| line[i - 1] == ' ' || line[i + 1] == ' '))
+			if (aux.line[aux.i] == '0' && (aux.i > aux.above || aux.i > aux.below
+					|| data->map[aux.line_numb - 1][aux.i] == ' '
+				|| data->map[aux.line_numb + 1][aux.i] == ' '
+				|| aux.line[aux.i - 1] == ' ' || aux.line[aux.i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);
-			else if (ft_strchr("NSWE", line[i]) && player_p(data, line[i], i, line_numb))
-				return (1);
+			else if (ft_strchr("NSWE", aux.line[aux.i]) && player_p(data,
+						aux.line[aux.i], aux.i, aux.line_numb))
+				return (EXIT_FAILURE);
 		}
-		line_numb++;
-		line = data->map[line_numb];
+		aux.line_numb++;
+		aux.line = data->map[aux.line_numb];
 	}
 	if (data->player_x == -1 || data->player_y == -1)
 		return (perror("Error! Invalid or no player position"), 1);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 void	get_above_below(t_data *data, int line_numb, int *above, int *below)
