@@ -66,23 +66,24 @@ int	validate_cf_numbers(char **mat)
 	return (0);
 }
 
-int	load_params(t_list *lst, t_data *data)
+int	load_params(t_list **lst, t_data *data)
 {
-	while (lst)
+	t_list	*aux;
+
+	aux = *lst;
+	while (aux)
 	{
-		if ((load_no(lst, data) != 0) || (load_so(lst, data) != 0)
-			|| (load_we(lst, data) != 0) || (load_ea(lst, data) != 0)
-			|| (load_f(lst, data) != 0) || (load_c(lst, data) != 0)
-			|| (load_map(lst, data) != 0))
+		if ((load_no(aux, data) != 0) || (load_so(aux, data) != 0)
+			|| (load_we(aux, data) != 0) || (load_ea(aux, data) != 0)
+			|| (load_f(aux, data) != 0) || (load_c(aux, data) != 0)
+			|| (load_map(aux, data) != 0))
 		{
 			free(data->no_texture.path);
 			free(data->so_texture.path);
 			free(data->we_texture.path);
-			free(data->ea_texture.path);
-			ft_free_mat(data->map);
-			return (1);
+			return (free(data->ea_texture.path), ft_free_mat(data->map), 1);
 		}
-		lst = lst->next;
+		aux = aux->next;
 	}
 	if (!data->no_texture.path || !data->so_texture.path
 		|| !data->we_texture.path || !data->ea_texture.path
@@ -90,8 +91,7 @@ int	load_params(t_list *lst, t_data *data)
 		return (perror("Error!\nUndefined param"), 1);
 	if (init_mlx_instances(data) != 0)
 		return (1);
-	image_init(data);
-	return (0);
+	return (ft_lstclear(lst, free), image_init(data), 0);
 }
 
 int	load_no(t_list *head, t_data *data)

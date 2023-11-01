@@ -67,7 +67,12 @@ int	main(int argc, char **argv)
 		return (0);
 	initialize_data(&data);
 	head = ft_read_file(fd, FT_LST | FT_NON);
-	if (load_params(head, &data) != 0) // tem que guardar o x e y de spawn do player
+	if (!head)
+	{
+		errno = ENOENT;
+		return (perror("Error!\n File read error"), EXIT_FAILURE);
+	}
+	if (load_params(&head, &data) != 0) // tem que guardar o x e y de spawn do player
 		return (1);
 	// OK - settar as imagens da mlx (o load_texture deles)
 	// OK - settar a posição do player igual o set_player_direction (pensa num plano cartesiano pra esses x y)
@@ -80,7 +85,6 @@ int	main(int argc, char **argv)
 	// pra qual direção ele está andando. Esses walk_direction e turn_direction são usados na update_player p/calcular a
 	// nova posição.
 	hooks_init(&data);
-	ft_lstclear(&head, free);
 	return (0);
 }
 

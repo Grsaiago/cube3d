@@ -98,7 +98,7 @@ typedef struct s_data
 }	t_data;
 
 /* info validation / loading */
-int		load_params(t_list *lst, t_data *data);
+int		load_params(t_list **lst, t_data *data);
 int		load_no(t_list *head, t_data *data);
 int		load_so(t_list *head, t_data *data);
 int		load_we(t_list *head, t_data *data);
