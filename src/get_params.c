@@ -561,19 +561,25 @@ void    put_pixel(t_image *image, int x, int y, unsigned int color)
 
 void    update_player(t_data *data)
 {
-	float rot_angle = data->turn_direction * ROTATION_SPEED;
-    float old_dir_x = data->dir_x;
-    float old_plane_x = data->plane_x;
+	float rot_angle;
+    float old_dir_x;
+    float old_plane_x;
+    float move_step;
+    float next_x;
+    float next_y;
 
+	rot_angle = data->turn_direction * ROTATION_SPEED;
+    old_dir_x = data->dir_x;
+    old_plane_x = data->plane_x;
     data->dir_x = data->dir_x * cos(rot_angle) - data->dir_y * sin(rot_angle);
     data->dir_y = old_dir_x * sin(rot_angle) + data->dir_y * cos(rot_angle);
     data->plane_x = data->plane_x * cos(rot_angle) - data->plane_y * sin(rot_angle);
     data->plane_y = old_plane_x * sin(rot_angle) + data->plane_y * cos(rot_angle);
 
-    float move_step = data->walk_direction * MOVE_SPEED;
+    move_step = data->walk_direction * MOVE_SPEED;
 
-    float next_x = data->player_x + (data->dir_x * move_step);
-    float next_y = data->player_y + (data->dir_y * move_step);
+    next_x = data->player_x + (data->dir_x * move_step);
+    next_y = data->player_y + (data->dir_y * move_step);
 
     if (data->map[(size_t)data->player_y][(size_t)next_x] != '1')
         data->player_x = next_x;
