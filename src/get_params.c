@@ -385,28 +385,28 @@ void	raycast(t_data *data)
 	{
 		// DAQUI
 		//calculate ray position and direction
-		double camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
-		double raydirx = data->dir_x + data->plane_x * camerax;
-		double raydiry = data->dir_y + data->plane_y * camerax;
+		double	camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
+		double	raydirx = data->dir_x + data->plane_x * camerax;
+		double	raydiry = data->dir_y + data->plane_y * camerax;
 
 		//which box of the map we're in
-		int mapx = data->player_x;
-		int mapy = data->player_y;
+		int	mapx = data->player_x;
+		int	mapy = data->player_y;
 
 		//length of ray from current position to next x or y-side
-		double sidedistx;
-		double sidedisty;
+		double	sidedistx;
+		double	sidedisty;
 
 		//length of ray from one x or y-side to next x or y-side
-		double deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
-		double deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
+		double	deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
+		double	deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
 		// ATÉ AQUI JOGA NUMA START RAY
 
 		//what direction to step in x or y-direction (either +1 or -1)
-		int stepx;
-		int stepy;
+		int	stepx;
+		int	stepy;
 
-		int side; //was a NS or a EW wall hit?
+		int	side; //was a NS or a EW wall hit?
 
 		t_texture	*image_to_paint;
 		// DAQUI
@@ -501,14 +501,14 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	double	texture_pos;
 
 	//Calculate height of line to draw on screen
-	int color = 0xFF0000;
-	int line_height = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
+	int	color = 0xFF0000;
+	int	line_height = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
 
 	//calculate lowest and highest pixel to fill in current stripe
-	int draw_start = -line_height/ 2 + WINDOW_HEIGHT / 2;
+	int	draw_start = -line_height/ 2 + WINDOW_HEIGHT / 2;
 	if (draw_start < 0)
 		draw_start = 0;
-	int draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
+	int	draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
 	if (draw_end >= WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT - 1;
 	step = 1.0 * image_to_paint->height / line_height;
