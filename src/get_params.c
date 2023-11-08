@@ -512,8 +512,7 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	if (draw_end >= WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT - 1;
 	step = 1.0 * image_to_paint->height / line_height;
-	texture_pos = (int)(draw_start - WINDOW_HEIGHT / 2
-			+ line_height / 2) * step;
+	texture_pos = step * (int)(draw_start - WINDOW_HEIGHT / 2 + line_height / 2);
 	// pintar o teto e o chão antes dos lados pros lados sobreporem
 	for (int y = 0; y < draw_start; y++)
 		put_pixel(&data->image, x, y, data->c_color);
