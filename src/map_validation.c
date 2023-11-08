@@ -83,27 +83,27 @@ int	validate_sides(t_data *data)
 
 int	validate_interior(t_data *data)
 {
-	t_map_interior_validation_aux	aux;
+	t_map_interior_validation_aux	ax;
 
-	aux.line_numb = 1;
-	aux.line = data->map[1];
-	while (aux.line && aux.line_numb < data->map_height)
+	ax.line_numb = 1;
+	ax.line = data->map[1];
+	while (ax.line && ax.line_numb < data->map_height)
 	{
-		get_above_below(data, aux.line_numb, &aux.above, &aux.below);
-		aux.i = 0;
-		while (aux.line[++aux.i] && (aux.i < (int)ft_strlen(aux.line) - 1))
+		get_above_below(data, ax.line_numb, &ax.above, &ax.below);
+		ax.i = 0;
+		while (ax.line[++ax.i] && (ax.i < (int)ft_strlen(ax.line) - 1))
 		{
-			if (aux.line[aux.i] == '0' && (aux.i > aux.above || aux.i > aux.below
-					|| data->map[aux.line_numb - 1][aux.i] == ' '
-				|| data->map[aux.line_numb + 1][aux.i] == ' '
-				|| aux.line[aux.i - 1] == ' ' || aux.line[aux.i + 1] == ' '))
+			if (ax.line[ax.i] == '0' && (ax.i > ax.above || ax.i > ax.below
+					|| data->map[ax.line_numb - 1][ax.i] == ' '
+				|| data->map[ax.line_numb + 1][ax.i] == ' '
+				|| ax.line[ax.i - 1] == ' ' || ax.line[ax.i + 1] == ' '))
 				return (perror("Error!\nNonvalid '0' placement"), 1);
-			else if (ft_strchr("NSWE", aux.line[aux.i]) && player_p(data,
-						aux.line[aux.i], aux.i, aux.line_numb))
+			else if (ft_strchr("NSWE", ax.line[ax.i]) && player_p(data,
+					ax.line[ax.i], ax.i, ax.line_numb))
 				return (EXIT_FAILURE);
 		}
-		aux.line_numb++;
-		aux.line = data->map[aux.line_numb];
+		ax.line_numb++;
+		ax.line = data->map[ax.line_numb];
 	}
 	if (data->player_x == -1 || data->player_y == -1)
 		return (perror("Error! Invalid or no player position"), 1);
@@ -160,7 +160,7 @@ void	set_player_direction(t_data *data)
 	return ;
 }
 
-void set_player_plane(t_data *data)
+void	set_player_plane(t_data *data)
 {
 	if (data->spawn_direction == 'N')
 	{

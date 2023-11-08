@@ -17,7 +17,7 @@ int		get_map_width(t_list *head);
 void	image_init(t_data *data);
 void	raycast(t_data *data);
 void	paint_image(t_data *data, int x, t_texture *image_to_paint);
-void    put_pixel(t_image *image, int x, int y, unsigned int color);
+void	put_pixel(t_image *image, int x, int y, unsigned int color);
 
 int	mat_to_rgb(char **mat)
 {
@@ -247,7 +247,8 @@ int	load_map(t_list *head, t_data *data)
 	char	*line;
 	int		aux;
 
-	if (!data->no_texture.path || !data->so_texture.path || !data->we_texture.path || !data->ea_texture.path
+	if (!data->no_texture.path || !data->so_texture.path
+		|| !data->we_texture.path || !data->ea_texture.path
 		|| !data->fok || !data->cok || data->map)
 		return (0);
 	data->map_height = get_map_height(head);
@@ -289,7 +290,8 @@ int	get_map_width(t_list *head)
 	while (head)
 	{
 		aux_len = ft_strlen(head->content);
-		max_len = ((aux_len > max_len) * aux_len) + ((max_len >= aux_len) * max_len);
+		max_len = ((aux_len > max_len) * aux_len)
+			+ ((max_len >= aux_len) * max_len);
 		head = head->next;
 	}
 	return (max_len);

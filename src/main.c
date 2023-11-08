@@ -15,7 +15,7 @@
 void	initialize_data(t_data *data);
 int		key_pressed(int keycode, t_data *data);
 int		key_released(int keycode, t_data *data);
-int 	close_window(t_data *data);
+int		close_window(t_data *data);
 void	image_init(t_data *data);
 int		hook(t_data *data);
 
@@ -72,18 +72,8 @@ int	main(int argc, char **argv)
 		errno = ENOENT;
 		return (perror("Error!\n File read error"), EXIT_FAILURE);
 	}
-	if (load_params(&head, &data) != 0) // tem que guardar o x e y de spawn do player
+	if (load_params(&head, &data) != 0)
 		return (1);
-	// OK - settar as imagens da mlx (o load_texture deles)
-	// OK - settar a posição do player igual o set_player_direction (pensa num plano cartesiano pra esses x y)
-	// OK -  settar a câmera do player igual o set_player_plane deles. Isso setta o FOV
-	// OK - settar o a posição do player igual o set_player_position deles. O player->pos_x += 0.5 é pra spawnar no meio do quadrado
-	// OK - image_init deles p/criar a primeira imagem - abrir a janela, cirar uma nova imagem (pq não podemos jogar os pixels na tela), 
-	// OK - hooks_init vai inicializar as os hooks de tecla e chamar a mlx_loop_hook pra executar sempre a função 'hook'
-	// passando o data como parametro pra ela.
-	// na hooks init ele tem os hooks de keypressed e keyreleased, que são usados pra saber se o player tá andando e
-	// pra qual direção ele está andando. Esses walk_direction e turn_direction são usados na update_player p/calcular a
-	// nova posição.
 	hooks_init(&data);
 	return (0);
 }
