@@ -389,7 +389,7 @@ void	raycast(t_data *data)
 		double		raydirx = data->dir_x + data->plane_x * camerax;
 		double		raydiry = data->dir_y + data->plane_y * camerax;
 		//which box of the map we're in
-		int 		mapx = data->player_x;
+		int			mapx = data->player_x;
 		int			mapy = data->player_y;
 		//length of ray from current position to next x or y-side
 		double		sidedistx;
@@ -450,37 +450,37 @@ void	raycast(t_data *data)
 		{
 			data->dist_buffer[x] = (sidedistx - deltadistx);
 			if (raydirx < 0)
-				data->ray_hit_direction= 'W';
+				data->ray_hit_direction = 'W';
 			else
-				data->ray_hit_direction= 'E';
+				data->ray_hit_direction = 'E';
 		}
 		else
 		{
 			data->dist_buffer[x] = (sidedisty - deltadisty);
 			if (raydiry < 0)
-				data->ray_hit_direction= 'N';
+				data->ray_hit_direction = 'N';
 			else
-				data->ray_hit_direction= 'S';
+				data->ray_hit_direction = 'S';
 		}
 		//calculate lowest and highest pixel to fill in current stripe
 		// Set texture position inline a partir daqui
-		if (data->ray_hit_direction== 'N' || data->ray_hit_direction== 'S')
+		if (data->ray_hit_direction == 'N' || data->ray_hit_direction == 'S')
 			data->wall_x = data->player_x + data->dist_buffer[x] * raydirx;
 		else
 			data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
 		data->wall_x -= (int)data->wall_x;
-		if (data->ray_hit_direction== 'N')
+		if (data->ray_hit_direction == 'N')
 			image_to_paint = &data->no_texture;
-		else if (data->ray_hit_direction== 'S')
+		else if (data->ray_hit_direction == 'S')
 			image_to_paint = &data->so_texture;
-		else if (data->ray_hit_direction== 'W')
+		else if (data->ray_hit_direction == 'W')
 			image_to_paint = &data->we_texture;
-		else if (data->ray_hit_direction== 'E')
+		else if (data->ray_hit_direction == 'E')
 			image_to_paint = &data->ea_texture;
 		data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
-		if (data->ray_hit_direction== 'S')
+		if (data->ray_hit_direction == 'S')
 			data->texture_x = image_to_paint->width - data->texture_x - 1;
-		else if (data->ray_hit_direction== 'W')
+		else if (data->ray_hit_direction == 'W')
 			data->texture_x = image_to_paint->width - data->texture_x - 1;
 		paint_image(data, x, image_to_paint);
 	}
@@ -499,14 +499,15 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	int		line_height = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
 
 	//calculate lowest and highest pixel to fill in current stripe
-	int		draw_start = -line_height/ 2 + WINDOW_HEIGHT / 2;
+	int		draw_start = -line_height / 2 + WINDOW_HEIGHT / 2;
 	if (draw_start < 0)
 		draw_start = 0;
 	int		draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
 	if (draw_end >= WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT - 1;
 	step = 1.0 * image_to_paint->height / line_height;
-	texture_pos = step * (int)(draw_start - WINDOW_HEIGHT / 2 + line_height / 2);
+	texture_pos = step
+		* (int)(draw_start - WINDOW_HEIGHT / 2 + line_height / 2);
 	// pintar o teto e o chão antes dos lados pros lados sobreporem
 	for (int y = 0; y < draw_start; y++)
 		put_pixel(&data->image, x, y, data->c_color);
