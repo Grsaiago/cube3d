@@ -385,51 +385,51 @@ void	raycast(t_data *data)
     {
 	// DAQUI
       //calculate ray position and direction
-      double cameraX = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
-      double rayDirX = data->dir_x + data->plane_x * cameraX;
-      double rayDirY = data->dir_y + data->plane_y * cameraX;
+      double camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
+      double raydirx = data->dir_x + data->plane_x * camerax;
+      double raydiry = data->dir_y + data->plane_y * camerax;
 
       //which box of the map we're in
-      int mapX = data->player_x;
-      int mapY = data->player_y;
+      int mapx = data->player_x;
+      int mapy = data->player_y;
 
       //length of ray from current position to next x or y-side
-      double sideDistX;
-      double sideDistY;
+      double sidedistx;
+      double sidedisty;
 
        //length of ray from one x or y-side to next x or y-side
-      double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-      double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+      double deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
+      double deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
 	  // ATÉ AQUI JOGA NUMA START RAY
 
       //what direction to step in x or y-direction (either +1 or -1)
-      int stepX;
-      int stepY;
+      int stepx;
+      int stepy;
 
       int side; //was a NS or a EW wall hit?
 
 	  t_texture	*image_to_paint;
 	  // DAQUI
       //calculate step and initial sideDist
-      if (rayDirX < 0)
+      if (raydirx < 0)
       {
-        stepX = -1;
-        sideDistX = (data->player_x - mapX) * deltaDistX;
+        stepx = -1;
+        sidedistx = (data->player_x - mapx) * deltadistx;
       }
       else
       {
-        stepX = 1;
-        sideDistX = (mapX + 1.0 - data->player_x) * deltaDistX;
+        stepx = 1;
+        sidedistx = (mapx + 1.0 - data->player_x) * deltadistx;
       }
-      if (rayDirY < 0)
+      if (raydiry < 0)
       {
-        stepY = -1;
-        sideDistY = (data->player_y - mapY) * deltaDistY;
+        stepy = -1;
+        sidedisty = (data->player_y - mapy) * deltadisty;
       }
       else
       {
-        stepY = 1;
-        sideDistY = (mapY + 1.0 - data->player_y) * deltaDistY;
+        stepy = 1;
+        sidedisty = (mapy + 1.0 - data->player_y) * deltadisty;
       }
 	  // ATÉ AQUI FAZ NUMA SET RAY DIRECTION
 
@@ -437,56 +437,56 @@ void	raycast(t_data *data)
       while (42)
       {
         //jump to next map square, either in x-direction, or in y-direction
-        if (sideDistX < sideDistY)
+        if (sidedistx < sidedisty)
         {
-          sideDistX += deltaDistX;
-          mapX += stepX;
+          sidedistx += deltadistx;
+          mapx += stepx;
           side = 0;
         }
         else
         {
-          sideDistY += deltaDistY;
-          mapY += stepY;
+          sidedisty += deltadisty;
+          mapy += stepy;
           side = 1;
         }
         //Check if ray has hit a wall
-        if (data->map[mapY][mapX] == '1') break;
+        if (data->map[mapy][mapx] == '1') break;
       }
 	  if (side == 0)
 	  {
-		  data->dist_buffer[x] = (sideDistX - deltaDistX);
-		  if (rayDirX < 0)
-			  data->rayHitDirection = 'W';
+		  data->dist_buffer[x] = (sidedistx - deltadistx);
+		  if (raydirx < 0)
+			  data->ray_hit_direction= 'W';
 		  else
-			  data->rayHitDirection = 'E';
+			  data->ray_hit_direction= 'E';
 	  }
 	  else
 	  {
-		  data->dist_buffer[x] = (sideDistY - deltaDistY);
-		  if (rayDirY < 0)
-			  data->rayHitDirection = 'N';
+		  data->dist_buffer[x] = (sidedisty - deltadisty);
+		  if (raydiry < 0)
+			  data->ray_hit_direction= 'N';
 		  else
-			  data->rayHitDirection = 'S';
+			  data->ray_hit_direction= 'S';
 	  }
 	  //calculate lowest and highest pixel to fill in current stripe
 	  // Set texture position inline a partir daqui
-	  if (data->rayHitDirection == 'N' || data->rayHitDirection == 'S')
-		  data->wall_x = data->player_x + data->dist_buffer[x] * rayDirX;
+	  if (data->ray_hit_direction== 'N' || data->ray_hit_direction== 'S')
+		  data->wall_x = data->player_x + data->dist_buffer[x] * raydirx;
 	  else
-		  data->wall_x = data->player_y + data->dist_buffer[x] * rayDirY;
+		  data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
 	  data->wall_x -= (int)data->wall_x;
-	  if (data->rayHitDirection == 'N')
+	  if (data->ray_hit_direction== 'N')
 		  image_to_paint = &data->no_texture;
-	  else if (data->rayHitDirection == 'S')
+	  else if (data->ray_hit_direction== 'S')
 		  image_to_paint = &data->so_texture;
-	  else if (data->rayHitDirection == 'W')
+	  else if (data->ray_hit_direction== 'W')
 		  image_to_paint = &data->we_texture;
-	  else if (data->rayHitDirection == 'E')
+	  else if (data->ray_hit_direction== 'E')
 		  image_to_paint = &data->ea_texture;
 	  data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
-	  if (data->rayHitDirection == 'S')
+	  if (data->ray_hit_direction== 'S')
 		  data->texture_x = image_to_paint->width - data->texture_x - 1;
-	  else if (data->rayHitDirection == 'W')
+	  else if (data->ray_hit_direction== 'W')
 		  data->texture_x = image_to_paint->width - data->texture_x - 1;
 	  paint_image(data, x, image_to_paint);
 	}
