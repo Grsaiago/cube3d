@@ -450,7 +450,7 @@ void	raycast(t_data *data)
 			}
 			//Check if ray has hit a wall
 			if (data->map[mapy][mapx] == '1')
-				break;
+				break ;
 		}
 		if (side == 0)
 		{
@@ -515,7 +515,7 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	texture_pos = (int)(draw_start - WINDOW_HEIGHT / 2
 			+ line_height / 2) * step;
 	// pintar o teto e o chão antes dos lados pros lados sobreporem
-	for(int y = 0; y < draw_start; y++)
+	for (int y = 0; y < draw_start; y++)
 		put_pixel(&data->image, x, y, data->c_color);
 	for (int y = draw_end; y < WINDOW_HEIGHT; y++)
 		put_pixel(&data->image, x, y, data->f_color);
