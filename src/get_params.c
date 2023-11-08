@@ -348,7 +348,8 @@ bool	init_mlx_instances(t_data *data)
 
 bool	init_mlx_image(t_texture *texture, void *mlx)
 {
-	texture->img_ptr = mlx_xpm_file_to_image(mlx, texture->path, &texture->width, &texture->height);
+	texture->img_ptr = mlx_xpm_file_to_image(mlx, texture->path,
+			&texture->width, &texture->height);
 	if (texture->img_ptr == NULL)
 		return (true);
 	texture->addr = (int *)mlx_get_data_addr(texture->img_ptr, &texture->bpp,
@@ -522,7 +523,8 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
     {
         texture_y = (int)texture_pos & (image_to_paint->height - 1);
         texture_pos += step;
-        color = image_to_paint->addr[(image_to_paint->height * texture_y + data->texture_x)];
+        color = image_to_paint->addr[(image_to_paint->height * texture_y
+				+ data->texture_x)];
         put_pixel(&data->image, x, y, color);
     }
 	// o draw start e o draw end são início de onde eu pinto até
@@ -575,8 +577,10 @@ void    update_player(t_data *data)
     old_plane_x = data->plane_x;
     data->dir_x = data->dir_x * cos(rot_angle) - data->dir_y * sin(rot_angle);
     data->dir_y = old_dir_x * sin(rot_angle) + data->dir_y * cos(rot_angle);
-    data->plane_x = data->plane_x * cos(rot_angle) - data->plane_y * sin(rot_angle);
-    data->plane_y = old_plane_x * sin(rot_angle) + data->plane_y * cos(rot_angle);
+    data->plane_x = data->plane_x * cos(rot_angle)
+		- data->plane_y * sin(rot_angle);
+    data->plane_y = old_plane_x * sin(rot_angle)
+		+ data->plane_y * cos(rot_angle);
 
     move_step = data->walk_direction * MOVE_SPEED;
 
