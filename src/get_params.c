@@ -382,113 +382,113 @@ void	image_init(t_data *data)
 void	raycast(t_data *data)
 {
 	for (int x = 0; x < WINDOW_WIDTH; x++)
-    {
-	// DAQUI
-      //calculate ray position and direction
-      double camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
-      double raydirx = data->dir_x + data->plane_x * camerax;
-      double raydiry = data->dir_y + data->plane_y * camerax;
+	{
+		// DAQUI
+		//calculate ray position and direction
+		double camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
+		double raydirx = data->dir_x + data->plane_x * camerax;
+		double raydiry = data->dir_y + data->plane_y * camerax;
 
-      //which box of the map we're in
-      int mapx = data->player_x;
-      int mapy = data->player_y;
+		//which box of the map we're in
+		int mapx = data->player_x;
+		int mapy = data->player_y;
 
-      //length of ray from current position to next x or y-side
-      double sidedistx;
-      double sidedisty;
+		//length of ray from current position to next x or y-side
+		double sidedistx;
+		double sidedisty;
 
-       //length of ray from one x or y-side to next x or y-side
-      double deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
-      double deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
-	  // ATÉ AQUI JOGA NUMA START RAY
+		//length of ray from one x or y-side to next x or y-side
+		double deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
+		double deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
+		// ATÉ AQUI JOGA NUMA START RAY
 
-      //what direction to step in x or y-direction (either +1 or -1)
-      int stepx;
-      int stepy;
+		//what direction to step in x or y-direction (either +1 or -1)
+		int stepx;
+		int stepy;
 
-      int side; //was a NS or a EW wall hit?
+		int side; //was a NS or a EW wall hit?
 
-	  t_texture	*image_to_paint;
-	  // DAQUI
-      //calculate step and initial sideDist
-      if (raydirx < 0)
-      {
-        stepx = -1;
-        sidedistx = (data->player_x - mapx) * deltadistx;
-      }
-      else
-      {
-        stepx = 1;
-        sidedistx = (mapx + 1.0 - data->player_x) * deltadistx;
-      }
-      if (raydiry < 0)
-      {
-        stepy = -1;
-        sidedisty = (data->player_y - mapy) * deltadisty;
-      }
-      else
-      {
-        stepy = 1;
-        sidedisty = (mapy + 1.0 - data->player_y) * deltadisty;
-      }
-	  // ATÉ AQUI FAZ NUMA SET RAY DIRECTION
-
-      //perform DDA
-      while (42)
-      {
-        //jump to next map square, either in x-direction, or in y-direction
-        if (sidedistx < sidedisty)
-        {
-          sidedistx += deltadistx;
-          mapx += stepx;
-          side = 0;
-        }
-        else
-        {
-          sidedisty += deltadisty;
-          mapy += stepy;
-          side = 1;
-        }
-        //Check if ray has hit a wall
-        if (data->map[mapy][mapx] == '1') break;
-      }
-	  if (side == 0)
-	  {
-		  data->dist_buffer[x] = (sidedistx - deltadistx);
-		  if (raydirx < 0)
-			  data->ray_hit_direction= 'W';
-		  else
-			  data->ray_hit_direction= 'E';
-	  }
-	  else
-	  {
-		  data->dist_buffer[x] = (sidedisty - deltadisty);
-		  if (raydiry < 0)
-			  data->ray_hit_direction= 'N';
-		  else
-			  data->ray_hit_direction= 'S';
-	  }
-	  //calculate lowest and highest pixel to fill in current stripe
-	  // Set texture position inline a partir daqui
-	  if (data->ray_hit_direction== 'N' || data->ray_hit_direction== 'S')
-		  data->wall_x = data->player_x + data->dist_buffer[x] * raydirx;
-	  else
-		  data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
-	  data->wall_x -= (int)data->wall_x;
-	  if (data->ray_hit_direction== 'N')
-		  image_to_paint = &data->no_texture;
-	  else if (data->ray_hit_direction== 'S')
-		  image_to_paint = &data->so_texture;
-	  else if (data->ray_hit_direction== 'W')
-		  image_to_paint = &data->we_texture;
-	  else if (data->ray_hit_direction== 'E')
-		  image_to_paint = &data->ea_texture;
-	  data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
-	  if (data->ray_hit_direction== 'S')
-		  data->texture_x = image_to_paint->width - data->texture_x - 1;
-	  else if (data->ray_hit_direction== 'W')
-		  data->texture_x = image_to_paint->width - data->texture_x - 1;
-	  paint_image(data, x, image_to_paint);
+		t_texture	*image_to_paint;
+		// DAQUI
+		//calculate step and initial sideDist
+		if (raydirx < 0)
+		{
+			stepx = -1;
+			sidedistx = (data->player_x - mapx) * deltadistx;
+		}
+		else
+		{
+			stepx = 1;
+			sidedistx = (mapx + 1.0 - data->player_x) * deltadistx;
+		}
+		if (raydiry < 0)
+		{
+			stepy = -1;
+			sidedisty = (data->player_y - mapy) * deltadisty;
+		}
+		else
+		{
+			stepy = 1;
+			sidedisty = (mapy + 1.0 - data->player_y) * deltadisty;
+		}
+			// ATÉ AQUI FAZ NUMA SET RAY DIRECTION
+		//perform DDA
+		while (42)
+		{
+			//jump to next map square, either in x-direction, or in y-direction
+			if (sidedistx < sidedisty)
+			{
+				sidedistx += deltadistx;
+				mapx += stepx;
+				side = 0;
+			}
+			else
+			{
+				sidedisty += deltadisty;
+				mapy += stepy;
+				side = 1;
+			}
+			//Check if ray has hit a wall
+			if (data->map[mapy][mapx] == '1')
+				break;
+		}
+		if (side == 0)
+		{
+			data->dist_buffer[x] = (sidedistx - deltadistx);
+			if (raydirx < 0)
+				data->ray_hit_direction= 'W';
+			else
+				data->ray_hit_direction= 'E';
+		}
+		else
+		{
+			data->dist_buffer[x] = (sidedisty - deltadisty);
+			if (raydiry < 0)
+				data->ray_hit_direction= 'N';
+			else
+				data->ray_hit_direction= 'S';
+		}
+		//calculate lowest and highest pixel to fill in current stripe
+		// Set texture position inline a partir daqui
+		if (data->ray_hit_direction== 'N' || data->ray_hit_direction== 'S')
+			data->wall_x = data->player_x + data->dist_buffer[x] * raydirx;
+		else
+			data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
+		data->wall_x -= (int)data->wall_x;
+		if (data->ray_hit_direction== 'N')
+			image_to_paint = &data->no_texture;
+		else if (data->ray_hit_direction== 'S')
+			image_to_paint = &data->so_texture;
+		else if (data->ray_hit_direction== 'W')
+			image_to_paint = &data->we_texture;
+		else if (data->ray_hit_direction== 'E')
+			image_to_paint = &data->ea_texture;
+		data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
+		if (data->ray_hit_direction== 'S')
+			data->texture_x = image_to_paint->width - data->texture_x - 1;
+		else if (data->ray_hit_direction== 'W')
+			data->texture_x = image_to_paint->width - data->texture_x - 1;
+		paint_image(data, x, image_to_paint);
 	}
 	//Calculate height of line to draw on screen
 	return ;
@@ -520,13 +520,13 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 	for (int y = draw_end; y < WINDOW_HEIGHT; y++)
 		put_pixel(&data->image, x, y, data->f_color);
 	for (int y = draw_start; y < draw_end; y++)
-    {
-        texture_y = (int)texture_pos & (image_to_paint->height - 1);
-        texture_pos += step;
-        color = image_to_paint->addr[(image_to_paint->height * texture_y
+	{
+		texture_y = (int)texture_pos & (image_to_paint->height - 1);
+		texture_pos += step;
+		color = image_to_paint->addr[(image_to_paint->height * texture_y
 				+ data->texture_x)];
-        put_pixel(&data->image, x, y, color);
-    }
+		put_pixel(&data->image, x, y, color);
+	}
 	// o draw start e o draw end são início de onde eu pinto até
 	// fim de onde eu pinto (no sentido vertical).
 	// Para pintar o teto e o chão é só eu fazer dois for,
@@ -557,20 +557,20 @@ void    set_texture_position(t_data *data)
 
 void    put_pixel(t_image *image, int x, int y, unsigned int color)
 {
-	char    *dst;
+	char	*dst;
 
-    dst = image->addr + (y * image->size_len + x * (image->bpp / 8));
-    *(unsigned int *)dst = color;
+	dst = image->addr + (y * image->size_len + x * (image->bpp / 8));
+	*(unsigned int *)dst = color;
 }
 
 void    update_player(t_data *data)
 {
-	float rot_angle;
-    float old_dir_x;
-    float old_plane_x;
-    float move_step;
-    float next_x;
-    float next_y;
+	float	rot_angle;
+	float	old_dir_x;
+	float	old_plane_x;
+	float	move_step;
+	float	next_x;
+	float	next_y;
 
 	rot_angle = data->turn_direction * ROTATION_SPEED;
     old_dir_x = data->dir_x;
