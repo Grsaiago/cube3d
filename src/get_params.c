@@ -554,7 +554,7 @@ void    set_texture_position(t_data *data)
 }
 */
 
-void    put_pixel(t_image *image, int x, int y, unsigned int color)
+void	put_pixel(t_image *image, int x, int y, unsigned int color)
 {
 	char	*dst;
 
@@ -562,7 +562,7 @@ void    put_pixel(t_image *image, int x, int y, unsigned int color)
 	*(unsigned int *)dst = color;
 }
 
-void    update_player(t_data *data)
+void	update_player(t_data *data)
 {
 	float	rot_angle;
 	float	old_dir_x;
