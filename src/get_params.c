@@ -573,24 +573,24 @@ void    update_player(t_data *data)
 	float	next_y;
 
 	rot_angle = data->turn_direction * ROTATION_SPEED;
-    old_dir_x = data->dir_x;
-    old_plane_x = data->plane_x;
-    data->dir_x = data->dir_x * cos(rot_angle) - data->dir_y * sin(rot_angle);
-    data->dir_y = old_dir_x * sin(rot_angle) + data->dir_y * cos(rot_angle);
-    data->plane_x = data->plane_x * cos(rot_angle)
+	old_dir_x = data->dir_x;
+	old_plane_x = data->plane_x;
+	data->dir_x = data->dir_x * cos(rot_angle) - data->dir_y * sin(rot_angle);
+	data->dir_y = old_dir_x * sin(rot_angle) + data->dir_y * cos(rot_angle);
+	data->plane_x = data->plane_x * cos(rot_angle)
 		- data->plane_y * sin(rot_angle);
-    data->plane_y = old_plane_x * sin(rot_angle)
+	data->plane_y = old_plane_x * sin(rot_angle)
 		+ data->plane_y * cos(rot_angle);
 
-    move_step = data->walk_direction * MOVE_SPEED;
+	move_step = data->walk_direction * MOVE_SPEED;
 
-    next_x = data->player_x + (data->dir_x * move_step);
-    next_y = data->player_y + (data->dir_y * move_step);
+	next_x = data->player_x + (data->dir_x * move_step);
+	next_y = data->player_y + (data->dir_y * move_step);
 
-    if (data->map[(size_t)data->player_y][(size_t)next_x] != '1')
-        data->player_x = next_x;
-    if (data->map[(size_t)next_y][(size_t)data->player_x] != '1')
-        data->player_y = next_y;
+	if (data->map[(size_t)data->player_y][(size_t)next_x] != '1')
+		data->player_x = next_x;
+	if (data->map[(size_t)next_y][(size_t)data->player_x] != '1')
+		data->player_y = next_y;
 }
 
 int	hook(t_data *data)
