@@ -502,18 +502,18 @@ void	paint_image(t_data *data, int x, t_texture *image_to_paint)
 
 	//Calculate height of line to draw on screen
 	int color = 0xFF0000;
-	int lineHeight = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
+	int line_height = (int)(WINDOW_HEIGHT / data->dist_buffer[x]);
 
 	//calculate lowest and highest pixel to fill in current stripe
-	int draw_start = -lineHeight / 2 + WINDOW_HEIGHT / 2;
+	int draw_start = -line_height/ 2 + WINDOW_HEIGHT / 2;
 	if (draw_start < 0)
 		draw_start = 0;
-	int draw_end = lineHeight / 2 + WINDOW_HEIGHT / 2;
+	int draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
 	if (draw_end >= WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT - 1;
-	step = 1.0 * image_to_paint->height / lineHeight;
+	step = 1.0 * image_to_paint->height / line_height;
 	texture_pos = (int)(draw_start - WINDOW_HEIGHT / 2
-			+ lineHeight / 2) * step;
+			+ line_height / 2) * step;
 	// pintar o teto e o chão antes dos lados pros lados sobreporem
 	for(int y = 0; y < draw_start; y++)
 		put_pixel(&data->image, x, y, data->c_color);
