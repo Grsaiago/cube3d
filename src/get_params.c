@@ -388,26 +388,20 @@ void	raycast(t_data *data)
 		double		camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
 		double		raydirx = data->dir_x + data->plane_x * camerax;
 		double		raydiry = data->dir_y + data->plane_y * camerax;
-
 		//which box of the map we're in
 		int 		mapx = data->player_x;
 		int			mapy = data->player_y;
-
 		//length of ray from current position to next x or y-side
 		double		sidedistx;
 		double		sidedisty;
-
 		//length of ray from one x or y-side to next x or y-side
 		double		deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
 		double		deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
 		// ATÉ AQUI JOGA NUMA START RAY
-
 		//what direction to step in x or y-direction (either +1 or -1)
 		int			stepx;
 		int			stepy;
-
 		int			side; //was a NS or a EW wall hit?
-
 		t_texture	*image_to_paint;
 		// DAQUI
 		//calculate step and initial sideDist
@@ -580,12 +574,9 @@ void	update_player(t_data *data)
 		- data->plane_y * sin(rot_angle);
 	data->plane_y = old_plane_x * sin(rot_angle)
 		+ data->plane_y * cos(rot_angle);
-
 	move_step = data->walk_direction * MOVE_SPEED;
-
 	next_x = data->player_x + (data->dir_x * move_step);
 	next_y = data->player_y + (data->dir_y * move_step);
-
 	if (data->map[(size_t)data->player_y][(size_t)next_x] != '1')
 		data->player_x = next_x;
 	if (data->map[(size_t)next_y][(size_t)data->player_x] != '1')
