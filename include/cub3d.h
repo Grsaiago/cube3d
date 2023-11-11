@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/11/11 03:13:51 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 04:12:21 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,26 @@ typedef struct s_paint_image_aux
 
 }	t_paint_image_aux;
 
+typedef struct s_update_player
+{
+	float	rot_angle;
+	float	old_dir_x;
+	float	old_plane_x;
+	float	move_step;
+	float	next_x;
+	float	next_y;
+
+}	t_update_player;
+
+typedef struct s_map_interior_validation_aux
+{
+	int		line_numb;
+	char	*line;
+	int		above;
+	int		below;
+	int		i;
+}	t_map_interior_validation_aux;
+
 /* info validation / loading */
 int		load_params(t_list **lst, t_data *data);
 int		load_no(t_list *head, t_data *data);
@@ -150,4 +170,33 @@ int		get_map_height(t_list *head);
 /* deletion */
 void	free_texture(t_data *data, t_texture *texture);
 
+/* I gave up from now on */
+int			get_map_width(t_list *head);
+void		image_init(t_data *data);
+void		raycast(t_data *data);
+void		paint_image(t_data *data, int x, t_texture *image_to_paint);
+void		put_pixel(t_image *image, int x, int y, unsigned int color);
+t_texture	*select_image_to_paint(t_data *data);
+void		paint_image_aux(t_data *dt, int x,
+				t_texture *img, t_paint_image_aux *a);
+void		set_ray_direction(t_data *data, t_raycast *aux);
+void		perform_dda(t_data *data, t_raycast *aux);
+void		raycast_aux(t_data *data, t_raycast *aux);
+void		raycast_aux_refresh_values(t_data *data, t_raycast *aux);
+t_texture	*select_image_to_paint(t_data *data);
+void		paint_image(t_data *data, int x, t_texture *image_to_paint);
+void		update_player(t_data *data);
+int			validate_coordinate_size(char **mat, int size);
+int			validate_cf_numbers(char **mat);
+void		initialize_data(t_data *data);
+int			key_pressed(int keycode, t_data *data);
+int			key_released(int keycode, t_data *data);
+int			close_window(t_data *data);
+void		image_init(t_data *data);
+int			hook(t_data *data);
+int			player_p(t_data *data, const char c, int width, int height);
+void		set_player_direction(t_data *data);
+void		set_player_plane(t_data *data);
+int			validate_args(int argc, char **argv);
+void		hooks_init(t_data *data);
 #endif

@@ -6,7 +6,7 @@
 #    By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/12 17:39:59 by gsaiago           #+#    #+#              #
-#    Updated: 2023/06/28 11:59:47 by gsaiago          ###   ########.fr        #
+#    Updated: 2023/11/11 04:06:48 by gsaiago          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,13 @@ CFLAGS = -g
 SRCS = $(SRC_PATH)main.c \
 	   $(SRC_PATH)get_params.c \
 	   $(SRC_PATH)map_validation.c \
+	   $(SRC_PATH)aux1.c \
+	   $(SRC_PATH)aux2.c \
+	   $(SRC_PATH)aux3.c \
+	   $(SRC_PATH)aux4.c \
+	   $(SRC_PATH)aux5.c \
+	   $(SRC_PATH)aux6.c \
+	   $(SRC_PATH)aux7.c \
 
 #$(wildcard *.c)
 
