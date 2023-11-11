@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/11/11 02:00:33 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 03:13:51 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,19 @@ typedef struct s_raycast
 	int			side;
 	t_texture	*image_to_paint;
 }	t_raycast;
+
+typedef struct s_paint_image_aux
+{
+	int		texture_y;
+	double	step;
+	double	texture_pos;
+	int		color;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
+	int		y;
+
+}	t_paint_image_aux;
 
 /* info validation / loading */
 int		load_params(t_list **lst, t_data *data);
