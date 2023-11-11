@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/11/11 01:28:48 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 02:00:33 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,24 @@ typedef struct s_data
 	void			*mlx;
 	void			*window;
 }	t_data;
+
+typedef struct s_raycast
+{
+	int			x;
+	double		camerax;
+	double		raydirx;
+	double		raydiry;
+	int			mapx;
+	int			mapy;
+	double		sidedistx;
+	double		sidedisty;
+	double		deltadistx;
+	double		deltadisty;
+	int			stepx;
+	int			stepy;
+	int			side;
+	t_texture	*image_to_paint;
+}	t_raycast;
 
 /* info validation / loading */
 int		load_params(t_list **lst, t_data *data);

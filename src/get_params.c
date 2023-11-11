@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/11/11 01:41:45 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 02:12:28 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,6 @@ int	get_map_height(t_list *head)
 	return (i);
 }
 
-// load and free of mlx instances
 bool	init_mlx_instances(t_data *data)
 {
 	data->mlx = mlx_init();
@@ -366,8 +365,6 @@ void	free_texture(t_data *data, t_texture *texture)
 	return ;
 }
 
-// initialization on painting on screen
-
 void	image_init(t_data *data)
 {
 	data->window = mlx_new_window(data->mlx,
@@ -380,109 +377,96 @@ void	image_init(t_data *data)
 	return ;
 }
 
+void	set_ray_direction(t_data *data, t_raycast *aux)
+{
+	if (aux->raydirx < 0)
+	{
+		aux->stepx = -1;
+		aux->sidedistx = (data->player_x - aux->mapx) * aux->deltadistx;
+	}
+	else
+	{
+		aux->stepx = 1;
+		aux->sidedistx = (aux->mapx + 1.0 - data->player_x) * aux->deltadistx;
+	}
+	if (aux->raydiry < 0)
+	{
+		aux->stepy = -1;
+		aux->sidedisty = (data->player_y - aux->mapy) * aux->deltadisty;
+	}
+	else
+	{
+		aux->stepy = 1;
+		aux->sidedisty = (aux->mapy + 1.0 - data->player_y) * aux->deltadisty;
+	}
+
+	return ;
+}
+
 void	raycast(t_data *data)
 {
-	int	x;
+	t_raycast	aux;
 
-	x = 0;
-	while (x < WINDOW_WIDTH)
+	ft_memset(&aux, 0, sizeof(t_raycast));
+	while (aux.x < WINDOW_WIDTH)
 	{
-		// DAQUI
-		//calculate ray position and direction
-		double		camerax = 2 * x / (double)WINDOW_WIDTH - 1; //x-coordinate in camera space
-		double		raydirx = data->dir_x + data->plane_x * camerax;
-		double		raydiry = data->dir_y + data->plane_y * camerax;
-		//which box of the map we're in
-		int			mapx = data->player_x;
-		int			mapy = data->player_y;
-		//length of ray from current position to next x or y-side
-		double		sidedistx;
-		double		sidedisty;
-		//length of ray from one x or y-side to next x or y-side
-		double		deltadistx = (raydirx == 0) ? 1e30 : fabs(1 / raydirx);
-		double		deltadisty = (raydiry == 0) ? 1e30 : fabs(1 / raydiry);
-		// ATÉ AQUI JOGA NUMA START RAY
-		//what direction to step in x or y-direction (either +1 or -1)
-		int			stepx;
-		int			stepy;
-		int			side; //was a NS or a EW wall hit?
-		t_texture	*image_to_paint;
-		// DAQUI
-		//calculate step and initial sideDist
-		if (raydirx < 0)
-		{
-			stepx = -1;
-			sidedistx = (data->player_x - mapx) * deltadistx;
-		}
-		else
-		{
-			stepx = 1;
-			sidedistx = (mapx + 1.0 - data->player_x) * deltadistx;
-		}
-		if (raydiry < 0)
-		{
-			stepy = -1;
-			sidedisty = (data->player_y - mapy) * deltadisty;
-		}
-		else
-		{
-			stepy = 1;
-			sidedisty = (mapy + 1.0 - data->player_y) * deltadisty;
-		}
+		aux.camerax = 2 * aux.x / (double)WINDOW_WIDTH - 1;
+		aux.raydirx = data->dir_x + data->plane_x * aux.camerax;
+		aux.raydiry = data->dir_y + data->plane_y * aux.camerax;
+		aux.mapx = data->player_x;
+		aux.mapy = data->player_y;
+		aux.deltadistx = (aux.raydirx == 0) ? 1e30 : fabs(1 / aux.raydirx);
+		aux.deltadisty = (aux.raydiry == 0) ? 1e30 : fabs(1 / aux.raydiry);
+		set_ray_direction(data, &aux);
 			// ATÉ AQUI FAZ NUMA SET RAY DIRECTION
 		//perform DDA
 		while (42)
 		{
-			//jump to next map square, either in x-direction, or in y-direction
-			if (sidedistx < sidedisty)
+			if (aux.sidedistx < aux.sidedisty)
 			{
-				sidedistx += deltadistx;
-				mapx += stepx;
-				side = 0;
+				aux.sidedistx += aux.deltadistx;
+				aux.mapx += aux.stepx;
+				aux.side = 0;
 			}
 			else
 			{
-				sidedisty += deltadisty;
-				mapy += stepy;
-				side = 1;
+				aux.sidedisty += aux.deltadisty;
+				aux.mapy += aux.stepy;
+				aux.side = 1;
 			}
-			//Check if ray has hit a wall
-			if (data->map[mapy][mapx] == '1')
+			if (data->map[aux.mapy][aux.mapx] == '1')
 				break ;
 		}
-		if (side == 0)
+		if (aux.side == 0)
 		{
-			data->dist_buffer[x] = (sidedistx - deltadistx);
-			if (raydirx < 0)
+			data->dist_buffer[aux.x] = (aux.sidedistx - aux.deltadistx);
+			if (aux.raydirx < 0)
 				data->ray_hit_direction = 'W';
 			else
 				data->ray_hit_direction = 'E';
 		}
 		else
 		{
-			data->dist_buffer[x] = (sidedisty - deltadisty);
-			if (raydiry < 0)
+			data->dist_buffer[aux.x] = (aux.sidedisty - aux.deltadisty);
+			if (aux.raydiry < 0)
 				data->ray_hit_direction = 'N';
 			else
 				data->ray_hit_direction = 'S';
 		}
-		//calculate lowest and highest pixel to fill in current stripe
-		// Set texture position inline a partir daqui
 		if (data->ray_hit_direction == 'N' || data->ray_hit_direction == 'S')
-			data->wall_x = data->player_x + data->dist_buffer[x] * raydirx;
+			data->wall_x = data->player_x + data->dist_buffer[aux.x] * aux.raydirx;
 		else
-			data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
+			data->wall_x = data->player_y + data->dist_buffer[aux.x] * aux.raydiry;
 		data->wall_x -= (int)data->wall_x;
-		image_to_paint = select_image_to_paint(data);
-		data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
+		aux.image_to_paint = select_image_to_paint(data);
+		data->texture_x = (int)(data->wall_x * (double)aux.image_to_paint->width);
 		if (data->ray_hit_direction == 'S')
-			data->texture_x = image_to_paint->width - data->texture_x - 1;
+			data->texture_x = aux.image_to_paint->width - data->texture_x - 1;
 		else if (data->ray_hit_direction == 'W')
-			data->texture_x = image_to_paint->width - data->texture_x - 1;
-		paint_image(data, x, image_to_paint);
-		x++;
+			data->texture_x = aux.image_to_paint->width - data->texture_x - 1;
+		paint_image(data, aux.x, aux.image_to_paint);
+		aux.x++;
 	}
-	//Calculate height of line to draw on screen
 	return ;
 }
 
