@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/11/11 02:12:28 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 02:46:13 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,6 +403,67 @@ void	set_ray_direction(t_data *data, t_raycast *aux)
 	return ;
 }
 
+void	perform_dda(t_data *data, t_raycast *aux)
+{
+	while (42)
+	{
+		if (aux->sidedistx < aux->sidedisty)
+		{
+			aux->sidedistx += aux->deltadistx;
+			aux->mapx += aux->stepx;
+			aux->side = 0;
+		}
+		else
+		{
+			aux->sidedisty += aux->deltadisty;
+			aux->mapy += aux->stepy;
+			aux->side = 1;
+		}
+		if (data->map[aux->mapy][aux->mapx] == '1')
+			break ;
+	}
+	return ;
+}
+
+void	raycast_aux(t_data *data, t_raycast *aux)
+{
+	if (aux->side == 0)
+	{
+		data->dist_buffer[aux->x] = (aux->sidedistx - aux->deltadistx);
+		if (aux->raydirx < 0)
+			data->ray_hit_direction = 'W';
+		else
+			data->ray_hit_direction = 'E';
+	}
+	else
+	{
+		data->dist_buffer[aux->x] = (aux->sidedisty - aux->deltadisty);
+		if (aux->raydiry < 0)
+			data->ray_hit_direction = 'N';
+		else
+			data->ray_hit_direction = 'S';
+	}
+	return ;
+}
+
+void	raycast_aux_refresh_values(t_data *data, t_raycast *aux)
+{
+	aux->camerax = 2 * aux->x / (double)WINDOW_WIDTH - 1;
+	aux->raydirx = data->dir_x + data->plane_x * aux->camerax;
+	aux->raydiry = data->dir_y + data->plane_y * aux->camerax;
+	aux->mapx = data->player_x;
+	aux->mapy = data->player_y;
+	if (aux->raydirx == 0)
+		aux->deltadistx = 1e30;
+	else
+		aux->deltadistx = fabs(1 / aux->raydirx);
+	if (aux->raydiry == 0)
+		aux->deltadistx = 1e30;
+	else
+		aux->deltadisty = fabs(1 / aux->raydiry);
+	return ;
+}
+
 void	raycast(t_data *data)
 {
 	t_raycast	aux;
@@ -410,49 +471,10 @@ void	raycast(t_data *data)
 	ft_memset(&aux, 0, sizeof(t_raycast));
 	while (aux.x < WINDOW_WIDTH)
 	{
-		aux.camerax = 2 * aux.x / (double)WINDOW_WIDTH - 1;
-		aux.raydirx = data->dir_x + data->plane_x * aux.camerax;
-		aux.raydiry = data->dir_y + data->plane_y * aux.camerax;
-		aux.mapx = data->player_x;
-		aux.mapy = data->player_y;
-		aux.deltadistx = (aux.raydirx == 0) ? 1e30 : fabs(1 / aux.raydirx);
-		aux.deltadisty = (aux.raydiry == 0) ? 1e30 : fabs(1 / aux.raydiry);
+		raycast_aux_refresh_values(data, &aux);
 		set_ray_direction(data, &aux);
-			// ATÉ AQUI FAZ NUMA SET RAY DIRECTION
-		//perform DDA
-		while (42)
-		{
-			if (aux.sidedistx < aux.sidedisty)
-			{
-				aux.sidedistx += aux.deltadistx;
-				aux.mapx += aux.stepx;
-				aux.side = 0;
-			}
-			else
-			{
-				aux.sidedisty += aux.deltadisty;
-				aux.mapy += aux.stepy;
-				aux.side = 1;
-			}
-			if (data->map[aux.mapy][aux.mapx] == '1')
-				break ;
-		}
-		if (aux.side == 0)
-		{
-			data->dist_buffer[aux.x] = (aux.sidedistx - aux.deltadistx);
-			if (aux.raydirx < 0)
-				data->ray_hit_direction = 'W';
-			else
-				data->ray_hit_direction = 'E';
-		}
-		else
-		{
-			data->dist_buffer[aux.x] = (aux.sidedisty - aux.deltadisty);
-			if (aux.raydiry < 0)
-				data->ray_hit_direction = 'N';
-			else
-				data->ray_hit_direction = 'S';
-		}
+		perform_dda(data, &aux);
+		raycast_aux(data, &aux);
 		if (data->ray_hit_direction == 'N' || data->ray_hit_direction == 'S')
 			data->wall_x = data->player_x + data->dist_buffer[aux.x] * aux.raydirx;
 		else
