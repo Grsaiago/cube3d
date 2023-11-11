@@ -6,7 +6,7 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 17:36:14 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 14:51:20 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 01:28:48 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define WINDOW_HEIGHT 480
 # define PLAYER_COLOR 0x0000ff
 # define RAY_COLOR 0xff0000
-# define MOVE_SPEED 0.02
-# define ROTATION_SPEED 0.02
+# define MOVE_SPEED 0.01
+# define ROTATION_SPEED 0.01
 
 #  define ESC 65307
 #  define W 119

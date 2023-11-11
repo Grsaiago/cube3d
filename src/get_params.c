@@ -6,18 +6,19 @@
 /*   By: gsaiago <gsaiago@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 15:31:31 by gsaiago           #+#    #+#             */
-/*   Updated: 2023/06/28 14:08:48 by gsaiago          ###   ########.fr       */
+/*   Updated: 2023/11/11 01:41:45 by gsaiago          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 #include "../include/minilibx-linux/mlx.h"
 
-int		get_map_width(t_list *head);
-void	image_init(t_data *data);
-void	raycast(t_data *data);
-void	paint_image(t_data *data, int x, t_texture *image_to_paint);
-void	put_pixel(t_image *image, int x, int y, unsigned int color);
+int			get_map_width(t_list *head);
+void		image_init(t_data *data);
+void		raycast(t_data *data);
+void		paint_image(t_data *data, int x, t_texture *image_to_paint);
+void		put_pixel(t_image *image, int x, int y, unsigned int color);
+t_texture	*select_image_to_paint(t_data *data);
 
 int	mat_to_rgb(char **mat)
 {
@@ -381,7 +382,10 @@ void	image_init(t_data *data)
 
 void	raycast(t_data *data)
 {
-	for (int x = 0; x < WINDOW_WIDTH; x++)
+	int	x;
+
+	x = 0;
+	while (x < WINDOW_WIDTH)
 	{
 		// DAQUI
 		//calculate ray position and direction
@@ -469,23 +473,30 @@ void	raycast(t_data *data)
 		else
 			data->wall_x = data->player_y + data->dist_buffer[x] * raydiry;
 		data->wall_x -= (int)data->wall_x;
-		if (data->ray_hit_direction == 'N')
-			image_to_paint = &data->no_texture;
-		else if (data->ray_hit_direction == 'S')
-			image_to_paint = &data->so_texture;
-		else if (data->ray_hit_direction == 'W')
-			image_to_paint = &data->we_texture;
-		else if (data->ray_hit_direction == 'E')
-			image_to_paint = &data->ea_texture;
+		image_to_paint = select_image_to_paint(data);
 		data->texture_x = (int)(data->wall_x * (double)image_to_paint->width);
 		if (data->ray_hit_direction == 'S')
 			data->texture_x = image_to_paint->width - data->texture_x - 1;
 		else if (data->ray_hit_direction == 'W')
 			data->texture_x = image_to_paint->width - data->texture_x - 1;
 		paint_image(data, x, image_to_paint);
+		x++;
 	}
 	//Calculate height of line to draw on screen
 	return ;
+}
+
+t_texture	*select_image_to_paint(t_data *data)
+{
+		if (data->ray_hit_direction == 'N')
+			return (&data->no_texture);
+		else if (data->ray_hit_direction == 'S')
+			return (&data->so_texture);
+		else if (data->ray_hit_direction == 'W')
+			return (&data->we_texture);
+		else if (data->ray_hit_direction == 'E')
+			return (&data->ea_texture);
+		return (&data->ea_texture);
 }
 
 void	paint_image(t_data *data, int x, t_texture *image_to_paint)
